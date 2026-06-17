@@ -1088,34 +1088,64 @@ class AgentFamily:
 
     def word_of_the_day(self):
         words = [
-            {"word": "Serendipity", "meaning": "Finding something good by accident"},
-            {"word": "Ephemeral", "meaning": "Lasting a very short time"},
-            {"word": "Ubiquity", "meaning": "Present everywhere at once"},
-            {"word": "Resilience", "meaning": "Ability to bounce back from difficulty"},
-            {"word": "Synergy", "meaning": "Combined energy greater than individual parts"},
-            {"word": "Catalyst", "meaning": "Something that speeds up a reaction"},
-            {"word": "Enigma", "meaning": "A person or thing that's mysterious"},
-            {"word": "Paradigm", "meaning": "A typical example or pattern"},
-            {"word": "Quintessential", "meaning": "The most perfect example of something"},
-            {"word": "Elusive", "meaning": "Difficult to find or catch"},
-            {"word": "Zenith", "meaning": "The highest point or peak"},
-            {"word": "Nexus", "meaning": "A central connection point"},
-            {"word": "Aura", "meaning": "A distinctive atmosphere or energy"},
-            {"word": "Forge", "meaning": "To shape or create with effort"},
-            {"word": "Lucid", "meaning": "Clear and easy to understand"},
-            {"word": "Psyche", "meaning": "The human soul or mind"},
-            {"word": "Pane", "meaning": "A panel or section of a larger whole"},
-            {"word": "Quill", "meaning": "A pen made from a feather — writing tool"},
-            {"word": "Scout", "meaning": "One sent ahead to gather information"},
-            {"word": "Ascend", "meaning": "To rise or climb upward"},
-            {"word": "Manifest", "meaning": "To make something happen through intention"},
-            {"word": "Abundance", "meaning": "A large quantity of something good"},
-            {"word": "Evolution", "meaning": "Gradual development over generations"},
-            {"word": "Autonomy", "meaning": "Freedom to govern oneself"},
-            {"word": "Synchronicity", "meaning": "Meaningful coincidences"},
+            {"word": "Serendipity", "meaning": "Finding something good by accident", "trading": "Sometimes the best trades come from unexpected market moves"},
+            {"word": "Ephemeral", "meaning": "Lasting a very short time", "trading": "Momentum is fleeting — capture it when you see it"},
+            {"word": "Ubiquity", "meaning": "Present everywhere at once", "trading": "BTC and ETH are everywhere — diversify beyond them"},
+            {"word": "Resilience", "meaning": "Ability to bounce back from difficulty", "trading": "Markets crash and recover — don't panic sell"},
+            {"word": "Synergy", "meaning": "Combined energy greater than individual parts", "trading": "Combine indicators for stronger signals"},
+            {"word": "Catalyst", "meaning": "Something that speeds up a reaction", "trading": "News events are catalysts — watch the calendar"},
+            {"word": "Enigma", "meaning": "A person or thing that's mysterious", "trading": "Some patterns are enigmatic — trust your analysis"},
+            {"word": "Paradigm", "meaning": "A typical example or pattern", "trading": "Market paradigms shift — adapt your strategy"},
+            {"word": "Quintessential", "meaning": "The most perfect example of something", "trading": "The quintessential trader is patient and disciplined"},
+            {"word": "Elusive", "meaning": "Difficult to find or catch", "trading": "Profit targets can be elusive — set realistic goals"},
+            {"word": "Zenith", "meaning": "The highest point or peak", "trading": "Recognize when a coin is at its zenith — take profits"},
+            {"word": "Nexus", "meaning": "A central connection point", "trading": "Bitcoin is the nexus of crypto markets"},
+            {"word": "Aura", "meaning": "A distinctive atmosphere or energy", "trading": "Read the market aura — sentiment matters"},
+            {"word": "Forge", "meaning": "To shape or create with effort", "trading": "Forge your own trading plan — don't follow the crowd"},
+            {"word": "Lucid", "meaning": "Clear and easy to understand", "trading": "Keep your strategy lucid — simple beats complex"},
+            {"word": "Psyche", "meaning": "The human soul or mind", "trading": "Master your psyche — emotions kill accounts"},
+            {"word": "Pane", "meaning": "A panel or section of a larger whole", "trading": "Zoom out — see the bigger picture pane"},
+            {"word": "Quill", "meaning": "A pen made from a feather — writing tool", "trading": "Journal every trade with your quill"},
+            {"word": "Scout", "meaning": "One sent ahead to gather information", "trading": "Scout the market before committing capital"},
+            {"word": "Ascend", "meaning": "To rise or climb upward", "trading": "Watch for ascending triangles — bullish signal"},
+            {"word": "Manifest", "meaning": "To make something happen through intention", "trading": "Manifest wealth through disciplined execution"},
+            {"word": "Abundance", "meaning": "A large quantity of something good", "trading": "Abundance follows those who manage risk"},
+            {"word": "Evolution", "meaning": "Gradual development over generations", "trading": "Your strategy must evolve with the market"},
+            {"word": "Autonomy", "meaning": "Freedom to govern oneself", "trading": "Financial autonomy through smart trading"},
+            {"word": "Synchronicity", "meaning": "Meaningful coincidences", "trading": "When indicators align — that's synchronicity"},
         ]
         day_index = datetime.now().timetuple().tm_yday % len(words)
         return words[day_index]
+
+    def binance_word_of_the_day(self):
+        """Binance WOTD — check for word completion tasks."""
+        import subprocess, json as _json
+        try:
+            result = subprocess.run(
+                ["curl", "-s", "https://www.binance.com/bapi/composite/v1/public/cms/article/list/query?type=1&catalogId=284&pageNo=1&pageSize=5", "--max-time", "10"],
+                capture_output=True, text=True, timeout=15
+            )
+            if result.stdout:
+                data = _json.loads(result.stdout)
+                articles = data.get("data", {}).get("catalogs", [{}])[0].get("articles", [])
+                for a in articles:
+                    title = a.get("title", "").lower()
+                    if "word" in title or "wotd" in title or "learn" in title:
+                        return {"found": True, "title": a.get("title"), "url": f"https://www.binance.com/en/support/announcement/{a.get('code','')}"}
+        except:
+            pass
+        
+        return {
+            "found": False,
+            "message": "No active Binance WOTD found. Check manually:",
+            "steps": [
+                "1. Open Binance app → More → Word of the Day",
+                "2. Or visit: https://www.binance.com/en/activity/wotd",
+                "3. Complete the word puzzle for reward tickets",
+                "4. Tickets can be traded for BNB or other rewards"
+            ],
+            "tip": "The Vessel can help you guess — tell us the letters you have!"
+        }
 
     def overseer(self):
         report = []

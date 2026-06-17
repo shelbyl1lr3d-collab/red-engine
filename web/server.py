@@ -74,6 +74,7 @@ PAGE = """<!DOCTYPE html>
     <button onclick="codeUI()">💻 Generate Code</button>
     <button onclick="geniusUI()">🤯 Ask Genius</button>
     <button onclick="send({command:'family_word'})">📖 Word of the Day</button>
+    <button onclick="send({command:'family_binance_wotd'})">🎰 Binance WOTD</button>
     <button onclick="send({command:'family_evolve'})">🔄 Evolve All</button>
     <button onclick="send({command:'family_recalibrate'})">⚙️ Recalibrate</button>
     <button onclick="send({command:'family_upgrade', type:'deep'})">⬆️ Deep Upgrade</button>
@@ -429,6 +430,30 @@ PAGE = """<!DOCTYPE html>
         return;
       }
 
+      if (d.word) {
+        let h = '<div style="font-size:18px;color:#ff9800;font-weight:bold;margin-bottom:8px">' + d.word + '</div>';
+        h += '<div style="margin-bottom:6px;color:#eee">' + d.meaning + '</div>';
+        if (d.trading) h += '<div style="color:#4caf50;font-size:12px;border-top:1px solid #333;padding-top:6px">📈 ' + d.trading + '</div>';
+        renderCard('📖 Word of the Day', h);
+        return;
+      }
+
+      if (d.found !== undefined && d.steps) {
+        let h = '';
+        if (d.found) {
+          h += '<div style="color:#4caf50;margin-bottom:6px">✅ Active WOTD found!</div>';
+          h += '<div style="color:#ff9800">' + (d.title||'') + '</div>';
+          if (d.url) h += '<a class="link" href="' + d.url + '" target="_blank">' + d.url + '</a>';
+        } else {
+          h += '<div style="color:#ff9800;margin-bottom:6px">🎰 Binance Word of the Day</div>';
+          h += '<div style="color:#eee;margin-bottom:8px">' + (d.message||'') + '</div>';
+          (d.steps||[]).forEach(s => { h += '<div style="color:#aaa;font-size:12px;margin:2px 0">' + s + '</div>'; });
+          if (d.tip) h += '<div style="color:#4fc3f7;font-size:11px;margin-top:6px;border-top:1px solid #333;padding-top:6px">💡 ' + d.tip + '</div>';
+        }
+        renderCard('🎰 Binance WOTD', h);
+        return;
+      }
+
       if (d.result) {
         const str = typeof d.result === 'string' ? d.result : JSON.stringify(d.result, null, 2);
         log(str, 'ok');
@@ -574,7 +599,7 @@ PAGE = """<!DOCTYPE html>
         const parts = val.split(' ');
         const member = parts[1];
         const msg = parts.slice(2).join(' ') || 'hello';
-        send({command:'chat', member:member, message:msg});
+        send({command:'family_chat', member:member, message:msg});
         return;
       }
 
@@ -907,7 +932,17 @@ class Handler(BaseHTTPRequestHandler):
             if cmd == "family_chat":
                 member = payload.get("member", "Red")
                 msg = payload.get("message", "hello")
-                return family.chat(member, msg)
+                import threading
+                result = [None]
+                def call_chat():
+                    result[0] = family.chat(member, msg)
+                t = threading.Thread(target=call_chat)
+                t.daemon = True
+                t.start()
+                t.join(timeout=90)
+                if result[0]:
+                    return result[0]
+                return {"member": member, "reply": "Thinking... (Ollama is slow on this machine, try again)", "emoji": "🔴", "color": "#ff3333"}
 
             if cmd == "family_ask":
                 q = payload.get("question", "")
@@ -996,6 +1031,9 @@ class Handler(BaseHTTPRequestHandler):
 
             if cmd == "family_word":
                 return family.word_of_the_day()
+
+            if cmd == "family_binance_wotd":
+                return family.binance_word_of_the_day()
 
             if cmd == "family_evolve":
                 return family.evolve()

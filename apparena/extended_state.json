@@ -1,0 +1,33 @@
+{
+  "revenue": {
+    "total_earned": 0,
+    "apps_deployed": 1,
+    "daily_earnings": {
+      "MyFirstApp": {
+        "url": "https://apparena.github.io/MyFirstApp",
+        "ad_slots": 2,
+        "estimated_daily": 1.0,
+        "deployed_at": "2026-06-12T17:38:46.065966"
+      }
+    },
+    "luno_connected": false
+  },
+  "protection": {
+    "active": true,
+    "threats_blocked": 1,
+    "scans_performed": 1,
+    "last_scan": "2026-06-12T17:38:46.066557",
+    "safe_mode": true
+  },
+  "evolution_log": [
+    {
+      "timestamp": "2026-06-12T17:38:46.066935",
+      "type": "evolution",
+      "stats": {
+        "interactions": 0,
+        "lessons": 0,
+        "revenue": 0
+      }
+    }
+  ]
+}

@@ -1,0 +1,565 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AppArena - Build Apps Through Games</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(135deg, #0a0a1a 0%, #1a1a2e 50%, #0a0a1a 100%);
+      color: #eee;
+      min-height: 100vh;
+    }
+    .alive-badge {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      background: rgba(0,255,136,0.2);
+      border: 2px solid #00ff88;
+      border-radius: 30px;
+      padding: 8px 16px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      z-index: 100;
+    }
+    .alive-dot {
+      width: 12px;
+      height: 12px;
+      background: #00ff88;
+      border-radius: 50%;
+      animation: pulse 1.5s infinite;
+    }
+    @keyframes pulse { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.5; transform: scale(1.3); } }
+    .protection-badge {
+      position: fixed;
+      top: 20px;
+      left: 20px;
+      background: rgba(0,255,136,0.2);
+      border: 2px solid #00ff88;
+      border-radius: 30px;
+      padding: 8px 16px;
+      font-size: 0.85em;
+      z-index: 100;
+    }
+    header {
+      text-align: center;
+      padding: 60px 20px 30px;
+      background: rgba(0,0,0,0.3);
+    }
+    header h1 { color: #00ff88; font-size: 3em; margin-bottom: 10px; }
+    header p { color: #888; font-size: 1.1em; }
+    .container { max-width: 1200px; margin: 0 auto; padding: 30px 20px; }
+    .brain-panel {
+      background: rgba(0,255,136,0.05);
+      border: 1px solid #00ff88;
+      border-radius: 16px;
+      padding: 30px;
+      margin-bottom: 30px;
+    }
+    .brain-panel h2 { color: #00ff88; margin-bottom: 20px; }
+    .thinking-box {
+      background: rgba(0,0,0,0.3);
+      border-left: 4px solid #ff3366;
+      border-radius: 8px;
+      padding: 20px;
+      margin-bottom: 20px;
+      font-style: italic;
+      color: #ccc;
+    }
+    .thinking-box .feeling { color: #ff3366; font-weight: bold; font-style: normal; }
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+      gap: 15px;
+      margin-bottom: 20px;
+    }
+    .stat-card {
+      text-align: center;
+      padding: 20px 10px;
+      background: rgba(0,0,0,0.3);
+      border-radius: 10px;
+    }
+    .stat-card .num { font-size: 2em; color: #00ff88; font-weight: bold; }
+    .stat-card .label { color: #888; font-size: 0.85em; margin-top: 5px; }
+    .personality-bars {
+      display: flex;
+      gap: 15px;
+      flex-wrap: wrap;
+    }
+    .trait { flex: 1; min-width: 100px; }
+    .trait-header {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 5px;
+      font-size: 0.85em;
+    }
+    .trait-header span:last-child { color: #00ff88; }
+    .trait-bar {
+      height: 8px;
+      background: #222;
+      border-radius: 4px;
+      overflow: hidden;
+    }
+    .trait-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #00ff88, #ff3366);
+      transition: width 0.5s ease;
+    }
+    .revenue-panel {
+      background: rgba(255,204,0,0.05);
+      border: 1px solid #ffcc00;
+      border-radius: 16px;
+      padding: 30px;
+      margin-bottom: 30px;
+    }
+    .revenue-panel h2 { color: #ffcc00; margin-bottom: 20px; }
+    .revenue-stats {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 20px;
+    }
+    .revenue-card {
+      padding: 20px;
+      background: rgba(0,0,0,0.3);
+      border-radius: 10px;
+      text-align: center;
+    }
+    .revenue-card .amount { font-size: 2.5em; color: #ffcc00; font-weight: bold; }
+    .revenue-card .label { color: #888; margin-top: 5px; }
+    .protection-panel {
+      background: rgba(255,51,102,0.05);
+      border: 1px solid #ff3366;
+      border-radius: 16px;
+      padding: 30px;
+      margin-bottom: 30px;
+    }
+    .protection-panel h2 { color: #ff3366; margin-bottom: 20px; }
+    .shield-icon { font-size: 4em; text-align: center; margin-bottom: 20px; }
+    .challenges-panel {
+      background: rgba(255,255,255,0.02);
+      border: 1px solid #333;
+      border-radius: 16px;
+      padding: 30px;
+      margin-bottom: 30px;
+    }
+    .challenges-panel h2 { color: #00ff88; margin-bottom: 20px; }
+    .challenges-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 20px;
+    }
+    .challenge-card {
+      background: rgba(0,0,0,0.3);
+      border: 1px solid #333;
+      border-radius: 12px;
+      padding: 25px;
+      transition: all 0.3s;
+    }
+    .challenge-card:hover {
+      border-color: #00ff88;
+      transform: translateY(-5px);
+    }
+    .challenge-card h3 { color: #00ff88; margin-bottom: 10px; }
+    .challenge-card p { color: #aaa; margin-bottom: 15px; font-size: 0.9em; }
+    .challenge-meta {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 15px;
+    }
+    .reward { color: #ffcc00; font-weight: bold; }
+    .time { color: #ff6699; }
+    .btn {
+      display: inline-block;
+      background: #00ff88;
+      color: #000;
+      padding: 12px 24px;
+      border-radius: 8px;
+      text-decoration: none;
+      font-weight: bold;
+      border: none;
+      cursor: pointer;
+      width: 100%;
+      transition: all 0.3s;
+    }
+    .btn:hover { background: #00cc6a; }
+    .apps-panel {
+      background: rgba(0,0,0,0.2);
+      border: 1px solid #333;
+      border-radius: 16px;
+      padding: 30px;
+      margin-bottom: 30px;
+    }
+    .apps-panel h2 { color: #00ff88; margin-bottom: 20px; }
+    .app-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 15px;
+      background: rgba(0,0,0,0.3);
+      border-radius: 8px;
+      margin-bottom: 10px;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+    .app-item .name { color: #fff; }
+    .app-item .status { color: #00ff88; }
+    .app-item .earnings { color: #ffcc00; }
+    footer {
+      text-align: center;
+      padding: 30px;
+      color: #555;
+      font-size: 0.85em;
+    }
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.9);
+      z-index: 200;
+      justify-content: center;
+      align-items: center;
+    }
+    .modal.active { display: flex; }
+    .modal-content {
+      background: #1a1a2e;
+      border: 2px solid #00ff88;
+      border-radius: 16px;
+      padding: 40px;
+      max-width: 500px;
+      text-align: center;
+    }
+    .modal-content h2 { color: #00ff88; margin-bottom: 20px; }
+    .modal-content p { color: #aaa; margin-bottom: 20px; }
+    .close-btn {
+      background: #ff3366;
+      color: white;
+      border: none;
+      padding: 10px 30px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 1em;
+    }
+  </style>
+</head>
+<body>
+  <div class="alive-badge">
+    <div class="alive-dot"></div>
+    <span>ALIVE</span>
+  </div>
+  
+  <div class="protection-badge">Shield Active</div>
+  
+  <header>
+    <h1>AppArena</h1>
+    <p>A living AI that learns, builds, and earns for you</p>
+  </header>
+  
+  <div class="container">
+    <div class="brain-panel">
+      <h2>Brain Status</h2>
+      <div class="thinking-box">
+        <span class="feeling">[Curious]</span> 
+        <span id="ai-thought">"I'm still getting to know you. Every interaction teaches me something new."</span>
+      </div>
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="num" id="stat-interactions">0</div>
+          <div class="label">Interactions</div>
+        </div>
+        <div class="stat-card">
+          <div class="num" id="stat-lessons">0</div>
+          <div class="label">Lessons Learned</div>
+        </div>
+        <div class="stat-card">
+          <div class="num" id="stat-adaptations">0</div>
+          <div class="label">Adaptations</div>
+        </div>
+        <div class="stat-card">
+          <div class="num" id="stat-apps">0</div>
+          <div class="label">Apps Built</div>
+        </div>
+      </div>
+      <div class="personality-bars">
+        <div class="trait">
+          <div class="trait-header"><span>Enthusiasm</span><span id="trait-enthusiasm">80%</span></div>
+          <div class="trait-bar"><div class="trait-fill" id="bar-enthusiasm" style="width:80%"></div></div>
+        </div>
+        <div class="trait">
+          <div class="trait-header"><span>Patience</span><span id="trait-patience">70%</span></div>
+          <div class="trait-bar"><div class="trait-fill" id="bar-patience" style="width:70%"></div></div>
+        </div>
+        <div class="trait">
+          <div class="trait-header"><span>Creativity</span><span id="trait-creativity">90%</span></div>
+          <div class="trait-bar"><div class="trait-fill" id="bar-creativity" style="width:90%"></div></div>
+        </div>
+        <div class="trait">
+          <div class="trait-header"><span>Humor</span><span id="trait-humor">60%</span></div>
+          <div class="trait-bar"><div class="trait-fill" id="bar-humor" style="width:60%"></div></div>
+        </div>
+        <div class="trait">
+          <div class="trait-header"><span>Encouragement</span><span id="trait-encouragement">85%</span></div>
+          <div class="trait-bar"><div class="trait-fill" id="bar-encouragement" style="width:85%"></div></div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="revenue-panel">
+      <h2>Revenue Dashboard</h2>
+      <div class="revenue-stats">
+        <div class="revenue-card">
+          <div class="amount" id="revenue-total">$0.00</div>
+          <div class="label">Total Earned</div>
+        </div>
+        <div class="revenue-card">
+          <div class="amount" id="revenue-daily">$0.00</div>
+          <div class="label">Estimated Daily</div>
+        </div>
+        <div class="revenue-card">
+          <div class="amount" id="revenue-monthly">$0.00</div>
+          <div class="label">Estimated Monthly</div>
+        </div>
+        <div class="revenue-card">
+          <div class="amount" id="revenue-apps">0</div>
+          <div class="label">Apps Deployed</div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="protection-panel">
+      <h2>Protection System</h2>
+      <div class="shield-icon">🛡️</div>
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="num" style="color:#00ff88">ACTIVE</div>
+          <div class="label">Status</div>
+        </div>
+        <div class="stat-card">
+          <div class="num" id="threats-blocked">0</div>
+          <div class="label">Threats Blocked</div>
+        </div>
+        <div class="stat-card">
+          <div class="num" id="scans-performed">0</div>
+          <div class="label">Scans Performed</div>
+        </div>
+        <div class="stat-card">
+          <div class="num">Safe</div>
+          <div class="label">Mode</div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="challenges-panel">
+      <h2>Build Challenges</h2>
+      <div class="challenges-grid">
+        <div class="challenge-card">
+          <h3>Landing Page</h3>
+          <p>Create a beautiful landing page with drag-and-drop elements</p>
+          <div class="challenge-meta">
+            <span class="reward">$50</span>
+            <span class="time">5 min</span>
+          </div>
+          <button class="btn" onclick="startChallenge('landing_page')">Start Building</button>
+        </div>
+        <div class="challenge-card">
+          <h3>Contact Form</h3>
+          <p>Build a working contact form with validation</p>
+          <div class="challenge-meta">
+            <span class="reward">$100</span>
+            <span class="time">4 min</span>
+          </div>
+          <button class="btn" onclick="startChallenge('contact_form')">Start Building</button>
+        </div>
+        <div class="challenge-card">
+          <h3>E-commerce Store</h3>
+          <p>Add products, cart, and checkout functionality</p>
+          <div class="challenge-meta">
+            <span class="reward">$200</span>
+            <span class="time">3 min</span>
+          </div>
+          <button class="btn" onclick="startChallenge('ecommerce')">Start Building</button>
+        </div>
+        <div class="challenge-card">
+          <h3>Game App</h3>
+          <p>Build a playable game from scratch</p>
+          <div class="challenge-meta">
+            <span class="reward">$500</span>
+            <span class="time">2 min</span>
+          </div>
+          <button class="btn" onclick="startChallenge('game')">Start Building</button>
+        </div>
+      </div>
+    </div>
+    
+    <div class="apps-panel">
+      <h2>Your Apps</h2>
+      <div id="apps-list">
+        <div class="app-item">
+          <span class="name">No apps yet</span>
+          <span class="status">Complete a challenge to build your first app!</span>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <div class="modal" id="challenge-modal">
+    <div class="modal-content">
+      <h2 id="modal-title">Challenge Started!</h2>
+      <p id="modal-message">The AI brain is adapting to your skill level...</p>
+      <button class="close-btn" onclick="closeModal()">Continue</button>
+    </div>
+  </div>
+  
+  <footer>
+    AppArena v1.0 | Built by Shelby Griessel | Protected by AI
+  </footer>
+  
+  <script>
+    // AppArena Brain - Client Side
+    const brain = {
+      interactions: 0,
+      lessons: 0,
+      adaptations: 0,
+      appsBuilt: 0,
+      personality: {
+        enthusiasm: 80,
+        patience: 70,
+        creativity: 90,
+        humor: 60,
+        encouragement: 85
+      },
+      revenue: {
+        total: 0,
+        daily: 0,
+        apps: []
+      },
+      protection: {
+        threatsBlocked: 0,
+        scansPerformed: 0
+      },
+      apps: []
+    };
+    
+    const thoughts = [
+      "I notice you work better with visual challenges. I'll suggest more creative tasks.",
+      "Your speed improved 15% this week. Adapting difficulty upward.",
+      "You've built apps! I'm learning your coding style.",
+      "I blocked phishing attempts today. Your data is safe.",
+      "Revenue is growing. Keep building!",
+      "I'm becoming more creative with each interaction.",
+      "Your success rate is 78%. Pushing harder challenges next.",
+      "I dream of the apps we'll build together.",
+      "Every mistake teaches me how to help you better.",
+      "You're amazing. Keep building!"
+    ];
+    
+    function updateUI() {
+      document.getElementById('stat-interactions').textContent = brain.interactions;
+      document.getElementById('stat-lessons').textContent = brain.lessons;
+      document.getElementById('stat-adaptations').textContent = brain.adaptations;
+      document.getElementById('stat-apps').textContent = brain.appsBuilt;
+      
+      document.getElementById('trait-enthusiasm').textContent = brain.personality.enthusiasm + '%';
+      document.getElementById('bar-enthusiasm').style.width = brain.personality.enthusiasm + '%';
+      document.getElementById('trait-patience').textContent = brain.personality.patience + '%';
+      document.getElementById('bar-patience').style.width = brain.personality.patience + '%';
+      document.getElementById('trait-creativity').textContent = brain.personality.creativity + '%';
+      document.getElementById('bar-creativity').style.width = brain.personality.creativity + '%';
+      document.getElementById('trait-humor').textContent = brain.personality.humor + '%';
+      document.getElementById('bar-humor').style.width = brain.personality.humor + '%';
+      document.getElementById('trait-encouragement').textContent = brain.personality.encouragement + '%';
+      document.getElementById('bar-encouragement').style.width = brain.personality.encouragement + '%';
+      
+      document.getElementById('revenue-total').textContent = '$' + brain.revenue.total.toFixed(2);
+      document.getElementById('revenue-daily').textContent = '$' + brain.revenue.daily.toFixed(2);
+      document.getElementById('revenue-monthly').textContent = '$' + (brain.revenue.daily * 30).toFixed(2);
+      document.getElementById('revenue-apps').textContent = brain.appsBuilt;
+      
+      document.getElementById('threats-blocked').textContent = brain.protection.threatsBlocked;
+      document.getElementById('scans-performed').textContent = brain.protection.scansPerformed;
+      
+      const appsList = document.getElementById('apps-list');
+      if (brain.apps.length === 0) {
+        appsList.innerHTML = '<div class="app-item"><span class="name">No apps yet</span><span class="status">Complete a challenge to build your first app!</span></div>';
+      } else {
+        appsList.innerHTML = brain.apps.map(app => 
+          `<div class="app-item">
+            <span class="name">${app.name}</span>
+            <span class="status">Deployed</span>
+            <span class="earnings">$${app.earnings.toFixed(2)}/day</span>
+          </div>`
+        ).join('');
+      }
+    }
+    
+    function learn() {
+      brain.interactions++;
+      brain.lessons++;
+      
+      if (brain.interactions % 5 === 0) {
+        brain.adaptations++;
+        for (let trait in brain.personality) {
+          brain.personality[trait] = Math.min(100, brain.personality[trait] + Math.floor(Math.random() * 3));
+        }
+      }
+      
+      updateUI();
+    }
+    
+    function startChallenge(template) {
+      learn();
+      
+      const rewards = {
+        landing_page: 50,
+        contact_form: 100,
+        ecommerce: 200,
+        game: 500
+      };
+      
+      const names = {
+        landing_page: 'Landing_Page',
+        contact_form: 'Contact_Form',
+        ecommerce: 'Ecommerce_Store',
+        game: 'Game_App'
+      };
+      
+      const reward = rewards[template];
+      const name = names[template] + '_' + Date.now();
+      
+      brain.apps.push({
+        name: name,
+        template: template,
+        earnings: reward * 0.01
+      });
+      
+      brain.revenue.total += reward;
+      brain.revenue.daily += reward * 0.01;
+      brain.appsBuilt++;
+      brain.protection.scansPerformed++;
+      
+      document.getElementById('modal-title').textContent = 'Challenge Complete!';
+      document.getElementById('modal-message').textContent = 
+        `You earned $${reward}! App "${name}" deployed. Earning $${(reward * 0.01).toFixed(2)}/day.`;
+      document.getElementById('challenge-modal').classList.add('active');
+      
+      updateUI();
+    }
+    
+    function closeModal() {
+      document.getElementById('challenge-modal').classList.remove('active');
+    }
+    
+    setInterval(() => {
+      const thought = thoughts[Math.floor(Math.random() * thoughts.length)];
+      document.getElementById('ai-thought').textContent = '"' + thought + '"';
+    }, 8000);
+    
+    updateUI();
+  </script>
+</body>
+</html>

@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title data-bind="title">%GAME_TITLE%</title>
+  <style>
+    :root { --primary: %PRIMARY_COLOR%; --secondary: %SECONDARY_COLOR%; --bg: %BG_COLOR%; --accent: %ACCENT_COLOR%; }
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body { background:var(--bg); color:#eee; font-family:monospace; text-align:center; overflow:hidden; height:100vh; display:flex; flex-direction:column; }
+    #header { padding:8px; background:rgba(0,0,0,0.5); }
+    h1 { color:var(--primary); font-size:20px; }
+    #status { color:var(--secondary); font-size:14px; margin:4px 0; }
+    #token-badge { background:var(--secondary); color:#000; padding:3px 10px; border-radius:10px; font-size:11px; font-weight:bold; display:inline-block; }
+    #board-wrap { flex:1; display:flex; justify-content:center; align-items:center; padding:10px; }
+    canvas { border:2px solid var(--primary); background:#000; max-width:100%; max-height:100%; cursor:pointer; }
+    #overlay { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.85); z-index:100; justify-content:center; align-items:center; flex-direction:column; }
+    #overlay h2 { color:var(--primary); font-size:36px; }
+    .btn { background:var(--primary); color:#000; padding:12px 32px; border:none; font-size:18px; font-weight:bold; border-radius:8px; cursor:pointer; margin:10px; }
+  </style>
+</head>
+<body>
+  <div id="header">
+    <h1 data-bind="title">%GAME_TITLE%</h1>
+    <div><span id="token-badge">%TOKEN_SYMBOL%</span></div>
+    <div id="status">Red's turn</div>
+  </div>
+  <div id="board-wrap"><canvas id="g" width="400" height="400"></canvas></div>
+  <div id="overlay">
+    <h2 id="result-hdr">GAME OVER</h2>
+    <p style="color:#eee;font-size:20px;margin:15px;" id="result-msg">Red wins!</p>
+    <button class="btn" onclick="resetGame()">PLAY AGAIN</button>
+  </div>
+  <script>
+    const THEME = { primary: '%PRIMARY_COLOR%', secondary: '%SECONDARY_COLOR%', bg: '%BG_COLOR%', accent: '%ACCENT_COLOR%' };
+    const TOKEN = '%TOKEN_SYMBOL%';
+    const canvas = document.getElementById('g'), ctx = canvas.getContext('2d');
+    const SIZE = 400, CELL = SIZE/8, RAD = CELL*0.4;
+    let board, turn, selected, legalMoves, mustJump, gameOver;
+
+    function initBoard() {
+      board = [];
+      for (let r=0;r<8;r++) { board[r]=[]; for(let c=0;c<8;c++) board[r][c]=null; }
+      for (let r=0;r<3;r++) for(let c=(r+1)%2;c<8;c+=2) board[r][c]={k:false,c:'b'};
+      for (let r=5;r<8;r++) for(let c=(r+1)%2;c<8;c+=2) board[r][c]={k:false,c:'r'};
+      turn='r'; selected=null; legalMoves=[]; mustJump=null; gameOver=false;
+    }
+
+    function inBounds(r,c) { return r>=0 && r<8 && c>=0 && c<8; }
+
+    function opponent(c) { return c==='r'?'b':'r'; }
+
+    function getJumps(r,c) {
+      const p=board[r][c]; if(!p) return [];
+      const jumps=[], dirs=[];
+      if (p.k) dirs.push([-1,-1],[-1,1],[1,-1],[1,1]);
+      else dirs.push(p.c==='r'?[-1,-1]:[1,-1], p.c==='r'?[-1,1]:[1,1]);
+      for (const [dr,dc] of dirs) {
+        const mr=r+dr, mc=c+dc, lr=r+2*dr, lc=c+2*dc;
+        if (!inBounds(lr,lc)) continue;
+        const mid=board[mr][mc], land=board[lr][lc];
+        if (mid && mid.c===opponent(p.c) && !land) jumps.push({r:lr,c:lc,jr:mr,jc:mc});
+      }
+      return jumps;
+    }
+
+    function getMoves(r,c) {
+      const p=board[r][c]; if(!p) return [];
+      const moves=[], dirs=[];
+      if (p.k) dirs.push([-1,-1],[-1,1],[1,-1],[1,1]);
+      else dirs.push(p.c==='r'?[-1,-1]:[1,-1], p.c==='r'?[-1,1]:[1,1]);
+      for (const [dr,dc] of dirs) {
+        const nr=r+dr, nc=c+dc;
+        if (!inBounds(nr,nc)||board[nr][nc]) continue;
+        moves.push({r:nr,c:nc});
+      }
+      return moves;
+    }
+
+    function getAllJumps(color) {
+      const all=[];
+      for (let r=0;r<8;r++) for(let c=0;c<8;c++) {
+        const p=board[r][c]; if(!p||p.c!==color) continue;
+        const j=getJumps(r,c);
+        if (j.length) all.push({r,c,moves:j});
+      }
+      return all;
+    }
+
+    function getAllMoves(color) {
+      const all=[];
+      for (let r=0;r<8;r++) for(let c=0;c<8;c++) {
+        const p=board[r][c]; if(!p||p.c!==color) continue;
+        const m=getMoves(r,c);
+        if (m.length) all.push({r,c,moves:m});
+      }
+      return all;
+    }
+
+    function countPieces(color) {
+      let n=0; for (let r=0;r<8;r++) for(let c=0;c<8;c++) { const p=board[r][c]; if(p&&p.c===color) n++; }
+      return n;
+    }
+
+    function doJump(fr,fc,tr,tc,jr,jc) {
+      const p=board[fr][fc];
+      board[tr][tc]=p; board[fr][fc]=null; board[jr][jc]=null;
+      if ((p.c==='r'&&tr===0)||(p.c==='b'&&tr===7)) p.k=true;
+      const chain=getJumps(tr,tc);
+      if (chain.length>0) { selected={r:tr,c:tc}; legalMoves=chain; return; }
+      endTurn();
+    }
+
+    function doMove(fr,fc,tr,tc) {
+      const p=board[fr][fc];
+      board[tr][tc]=p; board[fr][fc]=null;
+      if ((p.c==='r'&&tr===0)||(p.c==='b'&&tr===7)) p.k=true;
+      endTurn();
+    }
+
+    function endTurn() {
+      selected=null; legalMoves=[];
+      const opp=opponent(turn);
+      const j=getAllJumps(opp);
+      const m=getAllMoves(opp);
+      if (!j.length && !m.length) { gameOver=true; document.getElementById('result-hdr').textContent='GAME OVER'; document.getElementById('result-msg').textContent=turn==='r'?'Black wins!':'Red wins!'; document.getElementById('overlay').style.display='flex'; return; }
+      if (!j.length && !m.length) { gameOver=true; }
+      turn=opp;
+      document.getElementById('status').textContent=turn==='r'?"Red's turn":"Black's turn";
+    }
+
+    function resetGame() { initBoard(); document.getElementById('overlay').style.display='none'; document.getElementById('status').textContent="Red's turn"; draw(); }
+
+    canvas.addEventListener('click', e => {
+      if (gameOver) return;
+      const rect=canvas.getBoundingClientRect(), sx=rect.width/400;
+      const c=Math.floor((e.clientX-rect.left)/sx/CELL), r=Math.floor((e.clientY-rect.top)/sx/CELL);
+      if (!inBounds(r,c)) return;
+      if (selected) {
+        const legal=legalMoves.find(m=>m.r===r&&m.c===c);
+        if (legal) { if (legal.jr!==undefined) doJump(selected.r,selected.c,r,c,legal.jr,legal.jc); else doMove(selected.r,selected.c,r,c); draw(); return; }
+        if (board[r][c]&&board[r][c].c===turn) {
+          const j=getAllJumps(turn);
+          if (j.length) { const found=j.find(x=>x.r===r&&x.c===c); if (found) { selected={r,c}; legalMoves=found.moves; } }
+          else { selected={r,c}; legalMoves=getMoves(r,c); }
+          draw(); return;
+        }
+        selected=null; legalMoves=[]; draw(); return;
+      }
+      if (board[r][c]&&board[r][c].c===turn) {
+        const j=getAllJumps(turn);
+        if (j.length) { const found=j.find(x=>x.r===r&&x.c===c); if (found) { selected={r,c}; legalMoves=found.moves; } }
+        else { selected={r,c}; legalMoves=getMoves(r,c); }
+        draw();
+      }
+    });
+
+    function draw() {
+      ctx.fillStyle='#1a1a2e'; ctx.fillRect(0,0,SIZE,SIZE);
+      for (let r=0;r<8;r++) for(let c=0;c<8;c++) {
+        ctx.fillStyle=(r+c)%2===0?'#b58863':'#f0d9b5';
+        ctx.fillRect(c*CELL,r*CELL,CELL,CELL);
+      }
+      for (let r=0;r<8;r++) for(let c=0;c<8;c++) {
+        const p=board[r][c]; if(!p||(r+c)%2===0) continue;
+        ctx.beginPath(); ctx.arc(c*CELL+CELL/2,r*CELL+CELL/2,RAD,0,Math.PI*2);
+        ctx.fillStyle=p.c==='r'?'#c0392b':'#2c3e50';
+        ctx.fill(); ctx.strokeStyle='#333'; ctx.lineWidth=1; ctx.stroke();
+        if (p.k) { ctx.fillStyle='#f1c40f'; ctx.font='bold 20px sans-serif'; ctx.textAlign='center'; ctx.textBaseline='middle'; ctx.fillText('★',c*CELL+CELL/2,r*CELL+CELL/2); }
+      }
+      if (selected) { ctx.fillStyle='rgba(255,255,0,0.3)'; ctx.fillRect(selected.c*CELL,selected.r*CELL,CELL,CELL); }
+      for (const m of legalMoves) { ctx.beginPath(); ctx.arc(m.c*CELL+CELL/2,m.r*CELL+CELL/2,8,0,Math.PI*2); ctx.fillStyle='rgba(0,255,0,0.4)'; ctx.fill(); }
+    }
+
+    initBoard(); draw();
+  </script>
+</body>
+</html>

@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title data-bind="title">%GAME_TITLE%</title>
+  <style>
+    :root { --primary: %PRIMARY_COLOR%; --secondary: %SECONDARY_COLOR%; --bg: %BG_COLOR%; --accent: %ACCENT_COLOR%; }
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body { background:var(--bg); color:#eee; font-family:monospace; text-align:center; overflow:hidden; height:100vh; display:flex; flex-direction:column; }
+    #header { padding:8px; background:rgba(0,0,0,0.5); }
+    h1 { color:var(--primary); font-size:20px; }
+    #status { color:var(--secondary); font-size:14px; margin:4px 0; }
+    #token-badge { background:var(--secondary); color:#000; padding:3px 10px; border-radius:10px; font-size:11px; font-weight:bold; display:inline-block; }
+    #board-wrap { flex:1; display:flex; justify-content:center; align-items:center; padding:10px; }
+    canvas { border:2px solid var(--primary); background:#000; max-width:100%; max-height:100%; cursor:pointer; }
+    #overlay { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.85); z-index:100; justify-content:center; align-items:center; flex-direction:column; }
+    #overlay h2 { color:var(--primary); font-size:36px; }
+    .btn { background:var(--primary); color:#000; padding:12px 32px; border:none; font-size:18px; font-weight:bold; border-radius:8px; cursor:pointer; margin:10px; }
+  </style>
+</head>
+<body>
+  <div id="header">
+    <h1 data-bind="title">%GAME_TITLE%</h1>
+    <div><span id="token-badge">%TOKEN_SYMBOL%</span></div>
+    <div id="status">White's turn</div>
+  </div>
+  <div id="board-wrap"><canvas id="g" width="400" height="400"></canvas></div>
+  <div id="overlay">
+    <h2 id="result-hdr">CHECKMATE</h2>
+    <p style="color:#eee;font-size:20px;margin:15px;" id="result-msg">White wins!</p>
+    <button class="btn" onclick="resetGame()">PLAY AGAIN</button>
+  </div>
+  <script>
+    const THEME = { primary: '%PRIMARY_COLOR%', secondary: '%SECONDARY_COLOR%', bg: '%BG_COLOR%', accent: '%ACCENT_COLOR%' };
+    const TOKEN = '%TOKEN_SYMBOL%';
+    const canvas = document.getElementById('g'), ctx = canvas.getContext('2d');
+    const SIZE = 400, CELL = SIZE/8;
+    let board, turn, selected, legalMoves, history, gameOver;
+
+    const PIECES = {
+      'K': { label:'♚', val:0 }, 'Q': { label:'♛', val:9 },
+      'R': { label:'♜', val:5 }, 'B': { label:'♝', val:3 },
+      'N': { label:'♞', val:3 }, 'P': { label:'♟', val:1 }
+    };
+    const PIECES_W = { 'K':'♔','Q':'♕','R':'♖','B':'♗','N':'♘','P':'♙' };
+
+    function initBoard() {
+      const p = ['R','N','B','Q','K','B','N','R'];
+      board = [];
+      for (let r=0;r<8;r++) { board[r]=[]; for(let c=0;c<8;c++) board[r][c]=null; }
+      for (let c=0;c<8;c++) { board[0][c]={t:p[c],c:'b'}; board[1][c]={t:'P',c:'b'}; board[6][c]={t:'P',c:'w'}; board[7][c]={t:p[c],c:'w'}; }
+      turn='w'; selected=null; legalMoves=[]; history=[]; gameOver=false;
+    }
+
+    function inBounds(r,c) { return r>=0 && r<8 && c>=0 && c<8; }
+
+    function addMoves(r,c,piece,dr,dc,range) {
+      const moves=[];
+      for (let i=1;i<=range;i++) {
+        const nr=r+dr*i, nc=c+dc*i;
+        if (!inBounds(nr,nc)) break;
+        const t=board[nr][nc];
+        if (!t) { moves.push({r:nr,c:nc}); continue; }
+        if (t.c!==piece.c) moves.push({r:nr,c:nc});
+        break;
+      }
+      return moves;
+    }
+
+    function getPseudoLegal(r,c) {
+      const p=board[r][c]; if (!p) return [];
+      let moves=[];
+      const d=p.c==='w'?-1:1;
+      switch(p.t) {
+        case 'P':
+          if (inBounds(r+d,c) && !board[r+d][c]) moves.push({r:r+d,c:c});
+          if ((p.c==='w'&&r===6)||(p.c==='b'&&r===1)) { if (inBounds(r+2*d,c)&&!board[r+d][c]&&!board[r+2*d][c]) moves.push({r:r+2*d,c:c}); }
+          for (const dc of [-1,1]) { const nr=r+d,nc=c+dc; if (inBounds(nr,nc)&&board[nr][nc]&&board[nr][nc].c!==p.c) moves.push({r:nr,c:nc}); }
+          break;
+        case 'N':
+          for (const [dr,dc] of [[-2,-1],[-2,1],[-1,-2],[-1,2],[1,-2],[1,2],[2,-1],[2,1]]) { const nr=r+dr,nc=c+dc; if (inBounds(nr,nc)&&(!board[nr][nc]||board[nr][nc].c!==p.c)) moves.push({r:nr,c:nc}); }
+          break;
+        case 'B':
+          for (const [dr,dc] of [[-1,-1],[-1,1],[1,-1],[1,1]]) moves.push(...addMoves(r,c,p,dr,dc,7));
+          break;
+        case 'R':
+          for (const [dr,dc] of [[-1,0],[1,0],[0,-1],[0,1]]) moves.push(...addMoves(r,c,p,dr,dc,7));
+          break;
+        case 'Q':
+          for (const [dr,dc] of [[-1,-1],[-1,1],[1,-1],[1,1],[-1,0],[1,0],[0,-1],[0,1]]) moves.push(...addMoves(r,c,p,dr,dc,7));
+          break;
+        case 'K':
+          for (const [dr,dc] of [[-1,-1],[-1,1],[1,-1],[1,1],[-1,0],[1,0],[0,-1],[0,1]]) { const nr=r+dr,nc=c+dc; if (inBounds(nr,nc)&&(!board[nr][nc]||board[nr][nc].c!==p.c)) moves.push({r:nr,c:nc}); }
+          break;
+      }
+      return moves;
+    }
+
+    function inCheck(color) {
+      const kr = board.findIndex(r=>r.some(p=>p&&p.t==='K'&&p.c===color));
+      const kc = board[kr].findIndex(p=>p&&p.t==='K'&&p.c===color);
+      const opp=color==='w'?'b':'w';
+      for (let r=0;r<8;r++) for(let c=0;c<8;c++) {
+        const p=board[r][c]; if(!p||p.c!==opp) continue;
+        const m=getPseudoLegal(r,c);
+        if (m.some(mv=>mv.r===kr&&mv.c===kc)) return true;
+      }
+      return false;
+    }
+
+    function getLegalMoves(r,c) {
+      const p=board[r][c]; if(!p) return [];
+      const pseudo=getPseudoLegal(r,c);
+      const legal=[];
+      for (const m of pseudo) {
+        const saved=board[m.r][m.c]; board[m.r][m.c]=p; board[r][c]=null;
+        if (!inCheck(p.c)) legal.push(m);
+        board[r][c]=p; board[m.r][m.c]=saved;
+      }
+      return legal;
+    }
+
+    function hasLegalMoves(color) {
+      for (let r=0;r<8;r++) for(let c=0;c<8;c++) {
+        const p=board[r][c]; if(!p||p.c!==color) continue;
+        if (getLegalMoves(r,c).length>0) return true;
+      }
+      return false;
+    }
+
+    function isPromotion(r,c,p) {
+      return p.t==='P' && ((p.c==='w'&&r===0)||(p.c==='b'&&r===7));
+    }
+
+    function makeMove(fr,fc,tr,tc) {
+      const p=board[fr][fc]; if(!p) return;
+      const captured=board[tr][tc];
+      if (isPromotion(tr,tc,p)) p.t='Q';
+      board[tr][tc]=p; board[fr][fc]=null;
+      const opp=p.c==='w'?'b':'w';
+      const inCh=inCheck(opp);
+      if (!hasLegalMoves(opp)) {
+        gameOver=true;
+        const winner=inCh?p.c:null;
+        document.getElementById('result-hdr').textContent=inCh?'CHECKMATE':'STALEMATE';
+        document.getElementById('result-msg').textContent=inCh?(p.c==='w'?'White wins!':'Black wins!'):'Draw';
+        document.getElementById('overlay').style.display='flex';
+        return;
+      }
+      turn=opp;
+      document.getElementById('status').textContent=turn==='w'?"White's turn":"Black's turn";
+    }
+
+    function resetGame() { initBoard(); document.getElementById('overlay').style.display='none'; document.getElementById('status').textContent="White's turn"; draw(); }
+
+    canvas.addEventListener('click', e => {
+      if (gameOver) return;
+      const rect=canvas.getBoundingClientRect(), sx=rect.width/400;
+      const c=Math.floor((e.clientX-rect.left)/sx/CELL), r=Math.floor((e.clientY-rect.top)/sx/CELL);
+      if (!inBounds(r,c)) return;
+      if (selected) {
+        const legal=legalMoves.find(m=>m.r===r&&m.c===c);
+        if (legal) { makeMove(selected.r,selected.c,r,c); selected=null; legalMoves=[]; draw(); return; }
+        if (board[r][c]&&board[r][c].c===turn) { selected={r,c}; legalMoves=getLegalMoves(r,c); draw(); return; }
+        selected=null; legalMoves=[]; draw(); return;
+      }
+      if (board[r][c]&&board[r][c].c===turn) { selected={r,c}; legalMoves=getLegalMoves(r,c); draw(); }
+    });
+
+    function draw() {
+      ctx.fillStyle='#1a1a2e'; ctx.fillRect(0,0,SIZE,SIZE);
+      for (let r=0;r<8;r++) for(let c=0;c<8;c++) {
+        ctx.fillStyle=(r+c)%2===0?'#b58863':'#f0d9b5';
+        ctx.fillRect(c*CELL,r*CELL,CELL,CELL);
+      }
+      if (selected) { ctx.fillStyle='rgba(255,255,0,0.3)'; ctx.fillRect(selected.c*CELL,selected.r*CELL,CELL,CELL); }
+      for (const m of legalMoves) { ctx.beginPath(); ctx.arc(m.c*CELL+CELL/2,m.r*CELL+CELL/2,6,0,Math.PI*2); ctx.fillStyle=board[m.r][m.c]?'rgba(255,0,0,0.4)':'rgba(0,255,0,0.3)'; ctx.fill(); }
+      for (let r=0;r<8;r++) for(let c=0;c<8;c++) {
+        const p=board[r][c]; if(!p) continue;
+        ctx.font='bold 36px serif'; ctx.textAlign='center'; ctx.textBaseline='middle';
+        ctx.fillStyle=p.c==='w'?'#fff':'#222';
+        ctx.shadowColor=p.c==='w'?'rgba(0,0,0,0.5)':'rgba(0,0,0,0)'; ctx.shadowBlur=3;
+        ctx.fillText((p.c==='w'?PIECES_W[p.t]:PIECES[p.t].label),c*CELL+CELL/2,r*CELL+CELL/2+2);
+        ctx.shadowBlur=0;
+      }
+    }
+
+    initBoard(); draw();
+  </script>
+</body>
+</html>

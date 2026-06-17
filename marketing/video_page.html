@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Watch & Earn - Free Crypto</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #0a0a1a 0%, #1a1a2e 50%, #0a0a1a 100%);
+      color: #eee;
+      min-height: 100vh;
+    }
+    .hero {
+      text-align: center;
+      padding: 30px 20px;
+      background: rgba(0,0,0,0.4);
+      border-bottom: 2px solid #ff4444;
+    }
+    .hero h1 {
+      color: #ff4444;
+      font-size: 2em;
+      margin-bottom: 10px;
+    }
+    .hero p {
+      color: #aaa;
+      font-size: 1.1em;
+    }
+    .video-container {
+      max-width: 720px;
+      margin: 30px auto;
+      padding: 0 20px;
+    }
+    .video-wrapper {
+      position: relative;
+      border-radius: 12px;
+      overflow: hidden;
+      border: 2px solid #ff4444;
+      box-shadow: 0 0 30px rgba(255,68,68,0.3);
+    }
+    video {
+      width: 100%;
+      display: block;
+    }
+    .cta-overlay {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: linear-gradient(transparent, rgba(0,0,0,0.9));
+      padding: 20px;
+      text-align: center;
+    }
+    .cta-overlay p {
+      color: #ff4444;
+      font-size: 1.2em;
+      font-weight: bold;
+      margin-bottom: 10px;
+      animation: pulse 2s infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.6; }
+    }
+    .links-section {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 30px 20px;
+    }
+    .links-section h2 {
+      color: #ff4444;
+      font-size: 1.5em;
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    .link-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+      gap: 15px;
+    }
+    .link-card {
+      background: rgba(255,255,255,0.05);
+      border: 1px solid #333;
+      border-radius: 10px;
+      padding: 20px;
+      text-align: center;
+      transition: all 0.3s ease;
+    }
+    .link-card:hover {
+      border-color: #ff4444;
+      transform: translateY(-3px);
+      box-shadow: 0 5px 20px rgba(255,68,68,0.2);
+    }
+    .link-card h3 {
+      color: #00ff88;
+      margin-bottom: 8px;
+    }
+    .link-card p {
+      color: #888;
+      font-size: 0.85em;
+      margin-bottom: 12px;
+    }
+    .link-btn {
+      display: inline-block;
+      background: linear-gradient(135deg, #ff4444, #ff6666);
+      color: #fff;
+      padding: 10px 24px;
+      border-radius: 25px;
+      text-decoration: none;
+      font-weight: bold;
+      font-size: 0.9em;
+      transition: all 0.3s;
+    }
+    .link-btn:hover {
+      background: linear-gradient(135deg, #ff6666, #ff4444);
+      transform: scale(1.05);
+    }
+    .share-section {
+      text-align: center;
+      padding: 30px 20px;
+      background: rgba(0,0,0,0.3);
+      margin-top: 30px;
+    }
+    .share-btn {
+      display: inline-block;
+      padding: 12px 30px;
+      margin: 5px;
+      border-radius: 25px;
+      text-decoration: none;
+      font-weight: bold;
+      color: #fff;
+      transition: all 0.3s;
+    }
+    .share-btn.whatsapp { background: #25d366; }
+    .share-btn.facebook { background: #1877f2; }
+    .share-btn.twitter { background: #1da1f2; }
+    .share-btn.telegram { background: #0088cc; }
+    .share-btn:hover { transform: scale(1.05); }
+    footer {
+      text-align: center;
+      padding: 20px;
+      color: #555;
+      font-size: 0.8em;
+    }
+  </style>
+</head>
+<body>
+  <div class="hero">
+    <h1>Watch & Start Earning</h1>
+    <p>Watch the video, then click the links below to start earning free crypto!</p>
+  </div>
+
+  <div class="video-container">
+    <div class="video-wrapper">
+      <video controls poster="">
+        <source src="facebook_video.mp4" type="video/mp4">
+        Your browser does not support the video tag.
+      </video>
+      <div class="cta-overlay">
+        <p>Don't leave empty-handed - Start earning NOW!</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="links-section">
+    <h2>Start Earning Free Crypto Today</h2>
+    <div class="link-grid">
+      <div class="link-card">
+        <h3>Free Bitcoin</h3>
+        <p>Claim free Bitcoin every hour</p>
+        <a href="https://freebitcoinclick.com/?r=672193" target="_blank" class="link-btn">Get Bitcoin</a>
+      </div>
+      <div class="link-card">
+        <h3>Free Ethereum</h3>
+        <p>Free ETH faucet with dice game</p>
+        <a href="https://freeethereumclick.com/dice" target="_blank" class="link-btn">Get Ethereum</a>
+      </div>
+      <div class="link-card">
+        <h3>Free Tron</h3>
+        <p>Claim free TRX tokens</p>
+        <a href="https://freetronclick.com/?r=110646" target="_blank" class="link-btn">Get Tron</a>
+      </div>
+      <div class="link-card">
+        <h3>CoinChests</h3>
+        <p>Play games, earn crypto</p>
+        <a href="https://coinchests.com/play" target="_blank" class="link-btn">Play Now</a>
+      </div>
+      <div class="link-card">
+        <h3>EarnBit</h3>
+        <p>Earn Bitcoin through tasks</p>
+        <a href="https://earnbit.org/?r=2934" target="_blank" class="link-btn">Start Earning</a>
+      </div>
+      <div class="link-card">
+        <h3>Astro Cash</h3>
+        <p>Earn crypto online</p>
+        <a href="https://astrocash.net/?r=12" target="_blank" class="link-btn">Join Now</a>
+      </div>
+      <div class="link-card">
+        <h3>OLSP System</h3>
+        <p>Build online income</p>
+        <a href="https://olspsystem.com/m/1004357" target="_blank" class="link-btn">Learn More</a>
+      </div>
+      <div class="link-card">
+        <h3>We Share Abundance</h3>
+        <p>Community earning platform</p>
+        <a href="https://weshareabundance.com/?u=ShelbyG&couponcode=E242456" target="_blank" class="link-btn">Join Free</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="share-section">
+    <h2 style="color:#ff4444; margin-bottom:15px;">Share With Friends</h2>
+    <a href="https://wa.me/?text=Watch%20and%20earn%20free%20crypto!%20https://your-link.com" target="_blank" class="share-btn whatsapp">WhatsApp</a>
+    <a href="https://www.facebook.com/sharer/sharer.php?u=https://your-link.com" target="_blank" class="share-btn facebook">Facebook</a>
+    <a href="https://twitter.com/intent/tweet?text=Watch%20and%20earn%20free%20crypto!&url=https://your-link.com" target="_blank" class="share-btn twitter">Twitter</a>
+    <a href="https://t.me/share/url?url=https://your-link.com&text=Watch%20and%20earn%20free%20crypto!" target="_blank" class="share-btn telegram">Telegram</a>
+  </div>
+
+  <footer>
+    <p>Red Engine V2 Ecosystem | Shelby's Crypto Hub</p>
+  </footer>
+</body>
+</html>

@@ -1,0 +1,115 @@
+{
+  "name": "AppArena",
+  "version": "1.0.0",
+  "description": "Build apps through games, earn money, stay protected",
+  "owner": "Shelby Griessel",
+  "created": "2026-06-12",
+  "treasury": {
+    "luno_wallet": "AppArena_Treasury",
+    "min_withdrawal": 100,
+    "protection_enabled": true
+  },
+  "game_modes": {
+    "build_mode": {
+      "description": "Complete challenges to build real apps",
+      "levels": [
+        {
+          "level": 1,
+          "name": "Landing Page",
+          "challenge": "Drag and drop elements to create a landing page",
+          "template": "landing_page",
+          "reward": 50,
+          "time_limit": 300
+        },
+        {
+          "level": 2,
+          "name": "Contact Form",
+          "challenge": "Connect form fields to make them work",
+          "template": "contact_form",
+          "reward": 100,
+          "time_limit": 240
+        },
+        {
+          "level": 3,
+          "name": "E-commerce Store",
+          "challenge": "Add products and connect payment",
+          "template": "ecommerce",
+          "reward": 200,
+          "time_limit": 180
+        },
+        {
+          "level": 4,
+          "name": "Blog Platform",
+          "challenge": "Create posts and categories",
+          "template": "blog",
+          "reward": 300,
+          "time_limit": 150
+        },
+        {
+          "level": 5,
+          "name": "Game App",
+          "challenge": "Build a playable game",
+          "template": "game",
+          "reward": 500,
+          "time_limit": 120
+        }
+      ]
+    },
+    "sport_mode": {
+      "description": "Race against others to build apps",
+      "leaderboard": true,
+      "tournaments": true,
+      "prizes": [1000, 500, 250]
+    },
+    "revenue_mode": {
+      "description": "Your apps earn money automatically",
+      "ad_providers": ["google_adsense", "admob"],
+      "revenue_split": {
+        "user": 0.70,
+        "platform": 0.20,
+        "treasury": 0.10
+      }
+    }
+  },
+  "templates": {
+    "landing_page": {
+      "files": ["index.html", "style.css", "script.js"],
+      "ad_slots": 2,
+      "deploy_to": ["github_pages", "netlify"]
+    },
+    "contact_form": {
+      "files": ["index.html", "style.css", "form.js", "submit.php"],
+      "ad_slots": 1,
+      "deploy_to": ["github_pages"]
+    },
+    "ecommerce": {
+      "files": ["index.html", "products.js", "cart.js", "checkout.html"],
+      "ad_slots": 3,
+      "deploy_to": ["netlify", "vercel"]
+    },
+    "blog": {
+      "files": ["index.html", "post.html", "style.css", "admin.html"],
+      "ad_slots": 2,
+      "deploy_to": ["github_pages"]
+    },
+    "game": {
+      "files": ["index.html", "game.js", "style.css"],
+      "ad_slots": 1,
+      "deploy_to": ["github_pages", "itch_io"]
+    }
+  },
+  "protection": {
+    "security_scan": true,
+    "no_scams": true,
+    "safe_payments": true,
+    "parent_approval": false,
+    "ip_whitelist": ["localhost"],
+    "max_daily_withdrawal": 5000
+  },
+  "scoring": {
+    "speed_bonus": 1.5,
+    "quality_bonus": 2.0,
+    "perfect_build": 3.0,
+    "streak_multiplier": 1.1
+  }
+}

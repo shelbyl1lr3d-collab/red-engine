@@ -1,0 +1,133 @@
+{
+  "owner": "Shelby Griessel",
+  "email": "shelbygriessel@gmail.com",
+  "created": "2026-06-12",
+  "affiliates": [
+    {
+      "id": 1,
+      "name": "CoinChests",
+      "url": "https://coinchests.com/play",
+      "category": "crypto_faucet",
+      "description": "Play games to earn crypto",
+      "referral_code": null,
+      "status": "active"
+    },
+    {
+      "id": 2,
+      "name": "Astro Cash",
+      "url": "https://astrocash.net/?r=12",
+      "category": "crypto_earning",
+      "description": "Earn cryptocurrency online",
+      "referral_code": "12",
+      "status": "active"
+    },
+    {
+      "id": 3,
+      "name": "Free Bitcoin Click",
+      "url": "https://freebitcoinclick.com/?r=672193",
+      "category": "crypto_faucet",
+      "description": "Free Bitcoin faucet",
+      "referral_code": "672193",
+      "status": "active"
+    },
+    {
+      "id": 4,
+      "name": "Free Ethereum Click",
+      "url": "https://freeethereumclick.com/dice",
+      "category": "crypto_faucet",
+      "description": "Free Ethereum faucet with dice game",
+      "referral_code": null,
+      "status": "active"
+    },
+    {
+      "id": 5,
+      "name": "Bitcoin Generator",
+      "url": "https://bitcoin-generator.top/",
+      "category": "crypto_tool",
+      "description": "Bitcoin generation tool",
+      "referral_code": null,
+      "status": "active"
+    },
+    {
+      "id": 6,
+      "name": "EarnBit",
+      "url": "https://earnbit.org/?r=2934",
+      "category": "crypto_faucet",
+      "description": "Earn Bitcoin",
+      "referral_code": "2934",
+      "status": "active"
+    },
+    {
+      "id": 7,
+      "name": "Free Tron Click",
+      "url": "https://freetronclick.com/?r=110646",
+      "category": "crypto_faucet",
+      "description": "Free Tron faucet",
+      "referral_code": "110646",
+      "status": "active"
+    },
+    {
+      "id": 8,
+      "name": "LLTR Co",
+      "url": "https://lltrco.com/?r=rogueuk&ai=140905&at=a",
+      "category": "crypto_earning",
+      "description": "LLTR earning platform",
+      "referral_code": "rogueuk",
+      "status": "active"
+    },
+    {
+      "id": 9,
+      "name": "AdsHa.re",
+      "url": "https://adsha.re/example",
+      "category": "ad_sharing",
+      "description": "Ad sharing platform",
+      "referral_code": null,
+      "status": "active"
+    },
+    {
+      "id": 10,
+      "name": "i.mec.me",
+      "url": "https://i.mec.me/en-US?c=rep9xfs6",
+      "category": "rewards",
+      "description": "Rewards platform",
+      "referral_code": "rep9xfs6",
+      "status": "active"
+    },
+    {
+      "id": 11,
+      "name": "OLSP System",
+      "url": "https://olspsystem.com/m/1004357",
+      "category": "mlm_system",
+      "description": "OLSP marketing system",
+      "referral_code": "1004357",
+      "status": "active"
+    },
+    {
+      "id": 12,
+      "name": "We Share Abundance",
+      "url": "https://weshareabundance.com/?u=ShelbyG&couponcode=E242456",
+      "category": "mlm_system",
+      "description": "We Share Abundance platform",
+      "referral_code": "ShelbyG",
+      "coupon": "E242456",
+      "status": "active"
+    },
+    {
+      "id": 13,
+      "name": "Thinking Into Reality",
+      "url": "https://tirmemberarea.thinkingintoreality.com/register",
+      "category": "mlm_system",
+      "description": "Thinking Into Reality membership",
+      "referral_code": null,
+      "status": "active"
+    }
+  ],
+  "categories": {
+    "crypto_faucet": "Free crypto claiming sites",
+    "crypto_earning": "Crypto earning platforms",
+    "crypto_tool": "Bitcoin/crypto tools",
+    "ad_sharing": "Ad revenue sharing",
+    "rewards": "Rewards and cashback",
+    "mlm_system": "Multi-level marketing systems"
+  }
+}

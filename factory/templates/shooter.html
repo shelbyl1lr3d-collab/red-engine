@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <title data-bind="title">%GAME_TITLE%</title>
+  <style>
+    :root { --primary: %PRIMARY_COLOR%; --secondary: %SECONDARY_COLOR%; --bg: %BG_COLOR%; --accent: %ACCENT_COLOR%; }
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body { background:var(--bg); color:#eee; font-family:monospace; text-align:center; overflow:hidden; height:100vh; display:flex; flex-direction:column; }
+    #header { padding:8px; background:rgba(0,0,0,0.5); }
+    h1 { color:var(--primary); font-size:20px; }
+    #score { color:var(--primary); font-size:28px; font-weight:bold; }
+    #canvas-wrap { flex:1; display:flex; justify-content:center; align-items:center; }
+    canvas { border:2px solid var(--primary); background:#000; max-width:100%; max-height:100%; }
+    #overlay { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.85); z-index:100; justify-content:center; align-items:center; flex-direction:column; }
+    #overlay h2 { color:var(--primary); font-size:36px; }
+    .btn { background:var(--primary); color:#000; padding:12px 32px; border:none; font-size:18px; font-weight:bold; border-radius:8px; cursor:pointer; margin:10px; }
+    #token-badge { background:var(--secondary); color:#000; padding:3px 10px; border-radius:10px; font-size:11px; font-weight:bold; display:inline-block; }
+    .ad { background:#1a1a1a; padding:6px; margin:2px auto; max-width:400px; border-radius:4px; font-size:10px; color:#666; }
+  </style>
+</head>
+<body>
+  <div id="header">
+    <h1 data-bind="title">%GAME_TITLE%</h1>
+    <div><span id="token-badge">%TOKEN_SYMBOL%</span></div>
+    <div id="score">0</div>
+  </div>
+  <div class="ad"><!-- AdSense placeholder --></div>
+  <div id="canvas-wrap"><canvas id="g" width="%CANVAS_W%" height="%CANVAS_H%"></canvas></div>
+  <div id="overlay">
+    <h2 id="final-label">GAME OVER</h2>
+    <p style="color:#eee;font-size:20px;margin:15px;">Score: <span id="final-score">0</span></p>
+    <button class="btn" onclick="restartGame()">PLAY AGAIN</button>
+  </div>
+  <script>
+    // === CONFIG ===
+    const THEME = { primary: '%PRIMARY_COLOR%', secondary: '%SECONDARY_COLOR%', bg: '%BG_COLOR%', accent: '%ACCENT_COLOR%' };
+    const TOKEN = '%TOKEN_SYMBOL%';
+    const canvas = document.getElementById('g');
+    const ctx = canvas.getContext('2d');
+    const W = %CANVAS_W%, H = %CANVAS_H%;
+    let score = 0, running = false, gameOver = false;
+
+    const ship = { x: W/2-25, y: H-%GROUND_H%-50, w: 50, h: 40 };
+    let bullets = [], enemies = [];
+    let frame = 0;
+
+    document.addEventListener('mousemove', e => { const r = canvas.getBoundingClientRect(); ship.x = e.clientX - r.x - ship.w/2; });
+    canvas.addEventListener('click', () => { if (running) { bullets.push({ x: ship.x+ship.w/2-3, y: ship.y-10, w: 6, h: 15 }); } else if (!gameOver) startGame(); });
+    document.addEventListener('keydown', e => { if (e.key === ' ' && running) { bullets.push({ x: ship.x+ship.w/2-3, y: ship.y-10, w: 6, h: 15 }); } });
+
+    function startGame() { if (gameOver) resetGame(); running = true; document.getElementById('overlay').style.display = 'none'; }
+    function resetGame() { score=0; gameOver=false; bullets=[]; enemies=[]; frame=0; document.getElementById('score').innerText='0'; }
+    function die() { gameOver=true; running=false; document.getElementById('final-score').innerText=score; document.getElementById('overlay').style.display='flex'; }
+
+    function update() {
+      if (!running || gameOver) return;
+      frame++;
+      for (let i=bullets.length-1;i>=0;i--) { bullets[i].y-=8; if (bullets[i].y<0) bullets.splice(i,1); }
+      if (frame%30===0) enemies.push({ x: Math.random()*(W-30), y: -30, w: 30, h: 30, speed: 2+Math.random()*2 });
+      for (let i=enemies.length-1;i>=0;i--) { enemies[i].y+=enemies[i].speed; if (enemies[i].y>H) enemies.splice(i,1); }
+      for (let i=bullets.length-1;i>=0;i--) {
+        for (let j=enemies.length-1;j>=0;j--) {
+          if (bullets[i].x<enemies[j].x+enemies[j].w && bullets[i].x+bullets[i].w>enemies[j].x &&
+              bullets[i].y<enemies[j].y+enemies[j].h && bullets[i].y+bullets[i].h>enemies[j].y) {
+            bullets.splice(i,1); enemies.splice(j,1); score+=10;
+            document.getElementById('score').innerText=score; break;
+          }
+        }
+      }
+      for (let e of enemies) {
+        if (ship.x<e.x+e.w && ship.x+ship.w>e.x && ship.y<e.y+e.h && ship.y+ship.h>e.y) die();
+      }
+    }
+    function draw() {
+      ctx.clearRect(0,0,W,H);
+      ctx.fillStyle = THEME.primary; ctx.fillRect(ship.x, ship.y, ship.w, ship.h);
+      ctx.fillStyle = '#ffff00'; bullets.forEach(b => ctx.fillRect(b.x, b.y, b.w, b.h));
+      ctx.fillStyle = THEME.secondary; enemies.forEach(e => ctx.fillRect(e.x, e.y, e.w, e.h));
+    }
+    function loop() { update(); draw(); requestAnimationFrame(loop); }
+    loop(); resetGame();
+  </script>
+</body>
+</html>

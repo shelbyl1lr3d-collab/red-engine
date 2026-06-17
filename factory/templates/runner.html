@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <title data-bind="title">Loading...</title>
+  <link rel="stylesheet" href="/assets/style.css">
+  <style>
+    :root {
+      --primary: %PRIMARY_COLOR%;
+      --secondary: %SECONDARY_COLOR%;
+      --bg: %BG_COLOR%;
+      --accent: %ACCENT_COLOR%;
+    }
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body { background:var(--bg); color:#eee; font-family:monospace; text-align:center; overflow:hidden; height:100vh; display:flex; flex-direction:column; }
+    #header { padding:8px; background:rgba(0,0,0,0.5); }
+    h1 { color:var(--primary); font-size:20px; }
+    #score { color:var(--primary); font-size:28px; font-weight:bold; }
+    #canvas-wrap { flex:1; display:flex; justify-content:center; align-items:center; }
+    canvas { border:2px solid var(--primary); background:#000; max-width:100%; max-height:100%; }
+    #overlay { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.85); z-index:100; justify-content:center; align-items:center; flex-direction:column; }
+    #overlay h2 { color:var(--primary); font-size:36px; }
+    .btn { background:var(--primary); color:#000; padding:12px 32px; border:none; font-size:18px; font-weight:bold; border-radius:8px; cursor:pointer; margin:10px; }
+    #token-badge { background:var(--secondary); color:#000; padding:3px 10px; border-radius:10px; font-size:11px; font-weight:bold; display:inline-block; }
+    .ad { background:#1a1a1a; padding:6px; margin:2px auto; max-width:400px; border-radius:4px; font-size:10px; color:#666; }
+  </style>
+</head>
+<body>
+  <div id="header">
+    <h1 data-bind="title">%GAME_TITLE%</h1>
+    <div><span id="token-badge">%TOKEN_SYMBOL%</span></div>
+    <div id="score">0</div>
+  </div>
+  <div class="ad"><!-- AdSense placeholder: %AD_CODE% --></div>
+  <div id="canvas-wrap">
+    <canvas id="g" width="%CANVAS_W%" height="%CANVAS_H%"></canvas>
+  </div>
+  <div id="overlay">
+    <h2 id="final-label">GAME OVER</h2>
+    <p style="color:#eee;font-size:20px;margin:15px;">Score: <span id="final-score">0</span></p>
+    <button class="btn" onclick="restartGame()">PLAY AGAIN</button>
+  </div>
+  <script>
+    // === GAME CONFIG (pulled from metadata) ===
+    const CONFIG = %GAME_CONFIG_JSON%;
+    const THEME = { primary: '%PRIMARY_COLOR%', secondary: '%SECONDARY_COLOR%', bg: '%BG_COLOR%', accent: '%ACCENT_COLOR%' };
+    const TOKEN = '%TOKEN_SYMBOL%';
+
+    // === CORE GAME LOOP ===
+    const canvas = document.getElementById('g');
+    const ctx = canvas.getContext('2d');
+    const W = %CANVAS_W%, H = %CANVAS_H%;
+    let score = 0, running = false, gameOver = false;
+
+    // Player
+    const player = { x: 60, y: H/2, w: %PLAYER_W%, h: %PLAYER_H%, vy: 0 };
+    const GRAVITY = %GRAVITY%;
+    const JUMP_FORCE = %JUMP_FORCE%;
+    const OBSTACLE_SPEED = %OBSTACLE_SPEED%;
+    const SPAWN_RATE = %SPAWN_RATE%;
+
+    let obstacles = [];
+    let frame = 0;
+    let groundY = H - %GROUND_H%;
+
+    function startGame() {
+      if (gameOver) resetGame();
+      running = true;
+      document.getElementById('overlay').style.display = 'none';
+    }
+
+    function resetGame() {
+      score = 0; gameOver = false; obstacles = []; frame = 0;
+      player.x = 60; player.y = H/2; player.vy = 0;
+      document.getElementById('score').innerText = '0';
+    }
+
+    function die() {
+      gameOver = true; running = false;
+      document.getElementById('final-score').innerText = score;
+      document.getElementById('overlay').style.display = 'flex';
+      tryEarnTokens(score);
+    }
+
+    function tryEarnTokens(pts) {
+      const earned = Math.floor(pts / 100);
+      if (earned > 0) {
+        let total = parseInt(localStorage.getItem('earned_' + TOKEN) || '0');
+        total += earned;
+        localStorage.setItem('earned_' + TOKEN, total);
+        console.log(`Earned ${earned} ${TOKEN} | Total: ${total}`);
+      }
+    }
+
+    // Input handling
+    document.addEventListener('keydown', e => {
+      if ((e.key === ' ' || e.key === 'ArrowUp' || e.key === 'w') && running) {
+        player.vy = JUMP_FORCE;
+      }
+      if (!running && !gameOver && (e.key === ' ' || e.key === 'Enter')) startGame();
+    });
+    canvas.addEventListener('click', () => { if (running) player.vy = JUMP_FORCE; else if (!gameOver) startGame(); });
+    canvas.addEventListener('touchstart', e => { e.preventDefault(); if (running) player.vy = JUMP_FORCE; else if (!gameOver) startGame(); });
+
+    function update() {
+      if (!running || gameOver) return;
+      frame++;
+      player.vy += GRAVITY;
+      player.y += player.vy;
+
+      // Ground collision
+      if (player.y + player.h > groundY) { player.y = groundY - player.h; player.vy = 0; }
+      if (player.y < 0) { player.y = 0; player.vy = 0; }
+
+      // Spawn obstacles
+      if (frame % SPAWN_RATE === 0) {
+        const oh = %OBSTACLE_MIN_H% + Math.random() * (%OBSTACLE_MAX_H% - %OBSTACLE_MIN_H%);
+        obstacles.push({ x: W, y: groundY - oh, w: %OBSTACLE_W%, h: oh, scored: false });
+      }
+
+      // Move obstacles
+      for (let i = obstacles.length - 1; i >= 0; i--) {
+        obstacles[i].x -= OBSTACLE_SPEED;
+        if (obstacles[i].x + obstacles[i].w < 0) { obstacles.splice(i, 1); continue; }
+        if (!obstacles[i].scored && obstacles[i].x + obstacles[i].w < player.x) {
+          obstacles[i].scored = true;
+          score += 10;
+          document.getElementById('score').innerText = score;
+        }
+        // Collision
+        if (player.x < obstacles[i].x + obstacles[i].w && player.x + player.w > obstacles[i].x &&
+            player.y < obstacles[i].y + obstacles[i].h && player.y + player.h > obstacles[i].y) {
+          die(); return;
+        }
+      }
+    }
+
+    function draw() {
+      ctx.clearRect(0, 0, W, H);
+      // Ground
+      ctx.fillStyle = THEME.accent; ctx.globalAlpha = 0.15;
+      ctx.fillRect(0, groundY, W, H - groundY); ctx.globalAlpha = 1;
+      // Player
+      ctx.fillStyle = THEME.primary;
+      ctx.fillRect(player.x, player.y, player.w, player.h);
+      // Obstacles
+      ctx.fillStyle = THEME.secondary;
+      obstacles.forEach(o => ctx.fillRect(o.x, o.y, o.w, o.h));
+    }
+
+    function loop() { update(); draw(); requestAnimationFrame(loop); }
+    loop();
+    resetGame();
+  </script>
+</body>
+</html>

@@ -1,0 +1,219 @@
+{
+  "games": [
+    {
+      "name": "Omega Blast: Extreme",
+      "template": "runner",
+      "theme": "ocean",
+      "token": "OBE",
+      "url": "file:///home/j/redengine/factory/../builds/Omega_Blast_Extreme",
+      "created": "2026-06-12T11:39:44.841332"
+    },
+    {
+      "name": "The Cosmic Raid",
+      "template": "snake",
+      "theme": "cyber",
+      "token": "TCR",
+      "url": "file:///home/j/redengine/factory/../builds/The_Cosmic_Raid",
+      "created": "2026-06-12T11:41:01.297506"
+    },
+    {
+      "name": "Blast Evolution",
+      "template": "snake",
+      "theme": "tropical",
+      "token": "BE",
+      "url": "file:///home/j/redengine/factory/../builds/Blast_Evolution",
+      "created": "2026-06-12T13:07:54.167294"
+    },
+    {
+      "name": "Neon Wars",
+      "template": "runner",
+      "theme": "tropical",
+      "token": "NW",
+      "url": "file:///home/j/redengine/factory/../builds/Neon_Wars",
+      "created": "2026-06-12T13:07:55.374432"
+    },
+    {
+      "name": "Dash Wars",
+      "template": "runner",
+      "theme": "dark",
+      "token": "DW",
+      "url": "file:///home/j/redengine/factory/../builds/Dash_Wars",
+      "created": "2026-06-12T13:07:55.431537"
+    },
+    {
+      "name": "Siege Invasion",
+      "template": "chess",
+      "theme": "matrix",
+      "token": "SI",
+      "url": "file:///home/j/redengine/factory/../builds/Siege_Invasion",
+      "created": "2026-06-12T13:39:10.319521"
+    },
+    {
+      "name": "Thunder Blast: Wars",
+      "template": "chess",
+      "theme": "neon",
+      "token": "TBW",
+      "url": "file:///home/j/redengine/factory/../builds/Thunder_Blast_Wars",
+      "created": "2026-06-12T13:39:10.571372"
+    },
+    {
+      "name": "The Mega Fusion",
+      "template": "chess",
+      "theme": "candy",
+      "token": "TMF",
+      "url": "file:///home/j/redengine/factory/../builds/The_Mega_Fusion",
+      "created": "2026-06-12T13:39:33.768340"
+    },
+    {
+      "name": "Strike 2026",
+      "template": "checkers",
+      "theme": "candy",
+      "token": "S2",
+      "url": "file:///home/j/redengine/factory/../builds/Strike_2026",
+      "created": "2026-06-12T13:39:34.455479"
+    },
+    {
+      "name": "Digital Slash",
+      "template": "checkers",
+      "theme": "candy",
+      "token": "DS",
+      "url": "file:///home/j/redengine/factory/../builds/Digital_Slash",
+      "created": "2026-06-12T18:22:54.711010"
+    }
+  ],
+  "assets_dir": "assets",
+  "templates_dir": "templates",
+  "reskin_defaults": {
+    "player_speed": 5,
+    "gravity": 0.5,
+    "jump_force": -8,
+    "spawn_rate": 80,
+    "obstacle_speed": 3
+  },
+  "theme_palettes": [
+    {
+      "name": "neon",
+      "primary": "#00ff88",
+      "secondary": "#ff00ff",
+      "bg": "#0a0a1a",
+      "accent": "#ffff00"
+    },
+    {
+      "name": "cyber",
+      "primary": "#4fc3f7",
+      "secondary": "#ff3333",
+      "bg": "#000a1a",
+      "accent": "#ffeb3b"
+    },
+    {
+      "name": "candy",
+      "primary": "#ff69b4",
+      "secondary": "#00ff7f",
+      "bg": "#1a0a1a",
+      "accent": "#ffd700"
+    },
+    {
+      "name": "dark",
+      "primary": "#ff4444",
+      "secondary": "#4444ff",
+      "bg": "#050505",
+      "accent": "#ffffff"
+    },
+    {
+      "name": "tropical",
+      "primary": "#00e676",
+      "secondary": "#ff6f00",
+      "bg": "#001a0a",
+      "accent": "#ffd740"
+    },
+    {
+      "name": "ocean",
+      "primary": "#40c4ff",
+      "secondary": "#ff4081",
+      "bg": "#001a2a",
+      "accent": "#b2ff59"
+    },
+    {
+      "name": "sunset",
+      "primary": "#ff7043",
+      "secondary": "#7c4dff",
+      "bg": "#1a0005",
+      "accent": "#ffd740"
+    },
+    {
+      "name": "matrix",
+      "primary": "#00ff41",
+      "secondary": "#008f11",
+      "bg": "#000000",
+      "accent": "#00ff41"
+    }
+  ],
+  "title_generators": [
+    {
+      "prefix": [
+        "Neon",
+        "Cyber",
+        "Dark",
+        "Pixel",
+        "Retro",
+        "Ultra",
+        "Mega",
+        "Turbo",
+        "Hyper",
+        "Cosmic",
+        "Galactic",
+        "Phantom",
+        "Shadow",
+        "Storm",
+        "Thunder",
+        "Crypto",
+        "Quantum",
+        "Digital",
+        "Virtual",
+        "Omega"
+      ]
+    },
+    {
+      "middle": [
+        "Runner",
+        "Strike",
+        "Blast",
+        "Fury",
+        "Dash",
+        "Rush",
+        "Quest",
+        "Hunt",
+        "Duel",
+        "Siege",
+        "Crash",
+        "Storm",
+        "Fusion",
+        "Raid",
+        "Slash"
+      ]
+    },
+    {
+      "suffix": [
+        "Legends",
+        "Arena",
+        "Online",
+        "Gold",
+        "X",
+        "2026",
+        "World",
+        "Wars",
+        "Rising",
+        "Reborn",
+        "Chronicles",
+        "Evolution",
+        "Extreme",
+        "Invasion",
+        "Protocol",
+        "Syndicate",
+        "Empire",
+        "Dominion",
+        "Nexus"
+      ]
+    }
+  ]
+}

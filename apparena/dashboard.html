@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AppArena - Living AI App Builder</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(135deg, #0a0a1a 0%, #1a1a2e 50%, #0a0a1a 100%);
+      color: #eee;
+      min-height: 100vh;
+    }
+    
+    /* Alive indicator */
+    .alive-badge {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      background: rgba(0,255,136,0.2);
+      border: 2px solid #00ff88;
+      border-radius: 30px;
+      padding: 8px 16px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      z-index: 100;
+    }
+    .alive-dot {
+      width: 12px;
+      height: 12px;
+      background: #00ff88;
+      border-radius: 50%;
+      animation: pulse 1.5s infinite;
+    }
+    @keyframes pulse { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.5; transform: scale(1.3); } }
+    
+    .protection-badge {
+      position: fixed;
+      top: 20px;
+      left: 20px;
+      background: rgba(0,255,136,0.2);
+      border: 2px solid #00ff88;
+      border-radius: 30px;
+      padding: 8px 16px;
+      font-size: 0.85em;
+      z-index: 100;
+    }
+    
+    header {
+      text-align: center;
+      padding: 60px 20px 30px;
+      background: rgba(0,0,0,0.3);
+    }
+    header h1 { color: #00ff88; font-size: 3em; margin-bottom: 10px; }
+    header p { color: #888; font-size: 1.1em; }
+    
+    .container { max-width: 1200px; margin: 0 auto; padding: 30px 20px; }
+    
+    /* Brain Panel */
+    .brain-panel {
+      background: rgba(0,255,136,0.05);
+      border: 1px solid #00ff88;
+      border-radius: 16px;
+      padding: 30px;
+      margin-bottom: 30px;
+    }
+    .brain-panel h2 { color: #00ff88; margin-bottom: 20px; display: flex; align-items: center; gap: 10px; }
+    
+    .thinking-box {
+      background: rgba(0,0,0,0.3);
+      border-left: 4px solid #ff3366;
+      border-radius: 8px;
+      padding: 20px;
+      margin-bottom: 20px;
+      font-style: italic;
+      color: #ccc;
+    }
+    .thinking-box .feeling { color: #ff3366; font-weight: bold; font-style: normal; }
+    
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+      gap: 15px;
+      margin-bottom: 20px;
+    }
+    .stat-card {
+      text-align: center;
+      padding: 20px 10px;
+      background: rgba(0,0,0,0.3);
+      border-radius: 10px;
+    }
+    .stat-card .num { font-size: 2em; color: #00ff88; font-weight: bold; }
+    .stat-card .label { color: #888; font-size: 0.85em; margin-top: 5px; }
+    
+    .personality-bars {
+      display: flex;
+      gap: 15px;
+      flex-wrap: wrap;
+    }
+    .trait {
+      flex: 1;
+      min-width: 100px;
+    }
+    .trait-header {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 5px;
+      font-size: 0.85em;
+    }
+    .trait-header span:last-child { color: #00ff88; }
+    .trait-bar {
+      height: 8px;
+      background: #222;
+      border-radius: 4px;
+      overflow: hidden;
+    }
+    .trait-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #00ff88, #ff3366);
+      transition: width 0.5s ease;
+    }
+    
+    /* Revenue Panel */
+    .revenue-panel {
+      background: rgba(255,204,0,0.05);
+      border: 1px solid #ffcc00;
+      border-radius: 16px;
+      padding: 30px;
+      margin-bottom: 30px;
+    }
+    .revenue-panel h2 { color: #ffcc00; margin-bottom: 20px; }
+    
+    .revenue-stats {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 20px;
+    }
+    .revenue-card {
+      padding: 20px;
+      background: rgba(0,0,0,0.3);
+      border-radius: 10px;
+      text-align: center;
+    }
+    .revenue-card .amount { font-size: 2.5em; color: #ffcc00; font-weight: bold; }
+    .revenue-card .label { color: #888; margin-top: 5px; }
+    
+    /* Protection Panel */
+    .protection-panel {
+      background: rgba(255,51,102,0.05);
+      border: 1px solid #ff3366;
+      border-radius: 16px;
+      padding: 30px;
+      margin-bottom: 30px;
+    }
+    .protection-panel h2 { color: #ff3366; margin-bottom: 20px; }
+    
+    .shield-icon {
+      font-size: 4em;
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    
+    /* Challenges */
+    .challenges-panel {
+      background: rgba(255,255,255,0.02);
+      border: 1px solid #333;
+      border-radius: 16px;
+      padding: 30px;
+      margin-bottom: 30px;
+    }
+    .challenges-panel h2 { color: #00ff88; margin-bottom: 20px; }
+    
+    .challenges-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 20px;
+    }
+    .challenge-card {
+      background: rgba(0,0,0,0.3);
+      border: 1px solid #333;
+      border-radius: 12px;
+      padding: 25px;
+      transition: all 0.3s;
+    }
+    .challenge-card:hover {
+      border-color: #00ff88;
+      transform: translateY(-5px);
+    }
+    .challenge-card h3 { color: #00ff88; margin-bottom: 10px; }
+    .challenge-card p { color: #aaa; margin-bottom: 15px; font-size: 0.9em; }
+    .challenge-meta {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 15px;
+    }
+    .reward { color: #ffcc00; font-weight: bold; }
+    .time { color: #ff6699; }
+    
+    .btn {
+      display: inline-block;
+      background: #00ff88;
+      color: #000;
+      padding: 12px 24px;
+      border-radius: 8px;
+      text-decoration: none;
+      font-weight: bold;
+      border: none;
+      cursor: pointer;
+      width: 100%;
+      transition: all 0.3s;
+    }
+    .btn:hover { background: #00cc6a; }
+    
+    /* Apps Built */
+    .apps-panel {
+      background: rgba(0,0,0,0.2);
+      border: 1px solid #333;
+      border-radius: 16px;
+      padding: 30px;
+    }
+    .apps-panel h2 { color: #00ff88; margin-bottom: 20px; }
+    
+    .app-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 15px;
+      background: rgba(0,0,0,0.3);
+      border-radius: 8px;
+      margin-bottom: 10px;
+    }
+    .app-item .name { color: #fff; }
+    .app-item .status { color: #00ff88; }
+    .app-item .earnings { color: #ffcc00; }
+    
+    footer {
+      text-align: center;
+      padding: 30px;
+      color: #555;
+      font-size: 0.85em;
+    }
+  </style>
+</head>
+<body>
+  <div class="alive-badge">
+    <div class="alive-dot"></div>
+    <span>ALIVE</span>
+  </div>
+  
+  <div class="protection-badge">Shield Active</div>
+  
+  <header>
+    <h1>AppArena</h1>
+    <p>A living AI that learns, builds, and earns for you</p>
+  </header>
+  
+  <div class="container">
+    <!-- Brain Panel -->
+    <div class="brain-panel">
+      <h2>Brain Status</h2>
+      
+      <div class="thinking-box">
+        <span class="feeling">[Curious]</span> 
+        "I'm still getting to know you. Every interaction teaches me something new about how you think and create."
+      </div>
+      
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="num">47</div>
+          <div class="label">Interactions</div>
+        </div>
+        <div class="stat-card">
+          <div class="num">23</div>
+          <div class="label">Lessons Learned</div>
+        </div>
+        <div class="stat-card">
+          <div class="num">8</div>
+          <div class="label">Adaptations</div>
+        </div>
+        <div class="stat-card">
+          <div class="num">3</div>
+          <div class="label">Evolutions</div>
+        </div>
+        <div class="stat-card">
+          <div class="num">5</div>
+          <div class="label">Apps Built</div>
+        </div>
+      </div>
+      
+      <div class="personality-bars">
+        <div class="trait">
+          <div class="trait-header"><span>Enthusiasm</span><span>80%</span></div>
+          <div class="trait-bar"><div class="trait-fill" style="width:80%"></div></div>
+        </div>
+        <div class="trait">
+          <div class="trait-header"><span>Patience</span><span>70%</span></div>
+          <div class="trait-bar"><div class="trait-fill" style="width:70%"></div></div>
+        </div>
+        <div class="trait">
+          <div class="trait-header"><span>Creativity</span><span>90%</span></div>
+          <div class="trait-bar"><div class="trait-fill" style="width:90%"></div></div>
+        </div>
+        <div class="trait">
+          <div class="trait-header"><span>Humor</span><span>60%</span></div>
+          <div class="trait-bar"><div class="trait-fill" style="width:60%"></div></div>
+        </div>
+        <div class="trait">
+          <div class="trait-header"><span>Encouragement</span><span>85%</span></div>
+          <div class="trait-bar"><div class="trait-fill" style="width:85%"></div></div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Revenue Panel -->
+    <div class="revenue-panel">
+      <h2>Revenue Dashboard</h2>
+      <div class="revenue-stats">
+        <div class="revenue-card">
+          <div class="amount">$0.00</div>
+          <div class="label">Total Earned</div>
+        </div>
+        <div class="revenue-card">
+          <div class="amount">$1.50</div>
+          <div class="label">Estimated Daily</div>
+        </div>
+        <div class="revenue-card">
+          <div class="amount">$45.00</div>
+          <div class="label">Estimated Monthly</div>
+        </div>
+        <div class="revenue-card">
+          <div class="amount">5</div>
+          <div class="label">Apps Deployed</div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Protection Panel -->
+    <div class="protection-panel">
+      <h2>Protection System</h2>
+      <div class="shield-icon"></div>
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="num" style="color:#00ff88">ACTIVE</div>
+          <div class="label">Status</div>
+        </div>
+        <div class="stat-card">
+          <div class="num">12</div>
+          <div class="label">Threats Blocked</div>
+        </div>
+        <div class="stat-card">
+          <div class="num">47</div>
+          <div class="label">Scans Performed</div>
+        </div>
+        <div class="stat-card">
+          <div class="num">Safe</div>
+          <div class="label">Mode</div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Challenges Panel -->
+    <div class="challenges-panel">
+      <h2>Build Challenges</h2>
+      <div class="challenges-grid">
+        <div class="challenge-card">
+          <h3>Landing Page</h3>
+          <p>Create a beautiful landing page with drag-and-drop elements</p>
+          <div class="challenge-meta">
+            <span class="reward">$50</span>
+            <span class="time">5 min</span>
+          </div>
+          <button class="btn" onclick="startChallenge('landing_page')">Start Building</button>
+        </div>
+        <div class="challenge-card">
+          <h3>Contact Form</h3>
+          <p>Build a working contact form with validation</p>
+          <div class="challenge-meta">
+            <span class="reward">$100</span>
+            <span class="time">4 min</span>
+          </div>
+          <button class="btn" onclick="startChallenge('contact_form')">Start Building</button>
+        </div>
+        <div class="challenge-card">
+          <h3>E-commerce Store</h3>
+          <p>Add products, cart, and checkout functionality</p>
+          <div class="challenge-meta">
+            <span class="reward">$200</span>
+            <span class="time">3 min</span>
+          </div>
+          <button class="btn" onclick="startChallenge('ecommerce')">Start Building</button>
+        </div>
+        <div class="challenge-card">
+          <h3>Game App</h3>
+          <p>Build a playable game from scratch</p>
+          <div class="challenge-meta">
+            <span class="reward">$500</span>
+            <span class="time">2 min</span>
+          </div>
+          <button class="btn" onclick="startChallenge('game')">Start Building</button>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Apps Built Panel -->
+    <div class="apps-panel">
+      <h2>Your Apps</h2>
+      <div class="app-item">
+        <span class="name">Landing_Page_1781266900</span>
+        <span class="status">Deployed</span>
+        <span class="earnings">$0.50/day</span>
+      </div>
+      <div class="app-item">
+        <span class="name">Contact_Form_1781267200</span>
+        <span class="status">Deployed</span>
+        <span class="earnings">$0.25/day</span>
+      </div>
+      <div class="app-item">
+        <span class="name">Game_1781267500</span>
+        <span class="status">Deployed</span>
+        <span class="earnings">$0.75/day</span>
+      </div>
+    </div>
+  </div>
+  
+  <footer>
+    AppArena v1.0 | Built with Love | Protected by AI
+  </footer>
+  
+  <script>
+    const thoughts = [
+      "I notice you work better with visual challenges. I'll suggest more creative tasks.",
+      "Your speed improved 15% this week. Adapting difficulty upward.",
+      "You've built 5 apps! I'm learning your coding style.",
+      "I blocked 3 phishing attempts today. Your data is safe.",
+      "Revenue is growing. At this rate, you'll earn $45/month.",
+      "I'm becoming more creative with each interaction.",
+      "Your success rate is 78%. Pushing harder challenges next.",
+      "I dream of the apps we'll build together.",
+      "Every mistake teaches me how to help you better.",
+      "You're amazing. Keep building!"
+    ];
+    
+    setInterval(() => {
+      const thought = thoughts[Math.floor(Math.random() * thoughts.length)];
+      document.querySelector('.thinking-box').innerHTML = 
+        `<span class="feeling">[Thinking]</span> "${thought}"`;
+    }, 8000);
+    
+    function startChallenge(template) {
+      alert(`Starting ${template}! The AI brain is adapting to your skill level...`);
+    }
+  </script>
+</body>
+</html>

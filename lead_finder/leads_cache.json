@@ -1,0 +1,240 @@
+{
+  "searches": [
+    {
+      "query": "test query",
+      "category": "all",
+      "timestamp": "2026-06-15T13:07:18.077144",
+      "results_count": 8
+    },
+    {
+      "query": "test query",
+      "category": "all",
+      "timestamp": "2026-06-15T13:07:31.458190",
+      "results_count": 8
+    },
+    {
+      "query": "test query",
+      "category": "all",
+      "timestamp": "2026-06-15T13:07:50.978814",
+      "results_count": 8
+    }
+  ],
+  "leads": [
+    {
+      "title": "SQL Playground",
+      "url": "//duckduckgo.com/l/?uddg=https%3A%2F%2Fsqltutorial.org%2Fplayground%2F&amp;rut=7ce8ed4610e422ffe055bb543214baf74264162373faeda337e59ee0d2ae6a5d",
+      "snippet": "SQL Playground is a free and interactive tool to practice SQL statements online.",
+      "category": "all",
+      "query": "test query",
+      "found_at": "2026-06-15T13:07:18.076432",
+      "email": null
+    },
+    {
+      "title": "SQL Tryit Editor v1.6 - W3Schools",
+      "url": "//duckduckgo.com/l/?uddg=https%3A%2F%2Fwww.w3schools.com%2Fsql%2Ftrysql.asp%3Ffilename%3Dtrysql_asc&amp;rut=8f852043f7c44f0ea9ffb212a5d2718bdaabd65074364286cfcab15a05c58759",
+      "snippet": "Edit the SQL Statement, and click &quot;Run SQL&quot; to see the result.",
+      "category": "all",
+      "query": "test query",
+      "found_at": "2026-06-15T13:07:18.076953",
+      "email": null
+    },
+    {
+      "title": "SQL Test",
+      "url": "//duckduckgo.com/l/?uddg=https%3A%2F%2Fsqltest.net%2F&amp;rut=86455b9cef71e66d16d888d52f8cf16f895596d935dbbea1a8e950d38664ba59",
+      "snippet": "Free online SQL Test tool for easy SQL query learning and testing.",
+      "category": "all",
+      "query": "test query",
+      "found_at": "2026-06-15T13:07:18.076990",
+      "email": null
+    },
+    {
+      "title": "MySQL Online Editor - OneCompiler",
+      "url": "//duckduckgo.com/l/?uddg=https%3A%2F%2Fonecompiler.com%2Fmysql&amp;rut=6275f371011da4e749a80f8ef75f95ae03f9df13c9950ad3203ee517c08d715f",
+      "snippet": "OneCompiler&#x27;s MySQL online Workbench helps you to write, compile, debug, run and test MySQL queries online.",
+      "category": "all",
+      "query": "test query",
+      "found_at": "2026-06-15T13:07:18.077007",
+      "email": null
+    },
+    {
+      "title": "SQL Fiddle - Online SQL Compiler for learning &amp; practice",
+      "url": "//duckduckgo.com/l/?uddg=https%3A%2F%2Fsqlfiddle.com%2F&amp;rut=e0f545901cdb20a85aa882dc4bd27a9ee73c50f00f0ef95f68a5d5eb637de32c",
+      "snippet": "SQL Fiddle is a web-based platform that lets you write, edit, and execute any SQL query. You can also use AI chat and SQL query generator to learn and practice SQL with different databases.",
+      "category": "all",
+      "query": "test query",
+      "found_at": "2026-06-15T13:07:18.077024",
+      "email": null
+    },
+    {
+      "title": "Learn SQL - Online SQL Terminal - Practice SQL Querys",
+      "url": "//duckduckgo.com/l/?uddg=https%3A%2F%2Fwww.sql%2Dpractice.com%2F&amp;rut=d78d458dcf0326295ca4fff553b6f28a26df43b2266159e07fe78f1ebaebc992",
+      "snippet": "Practice SQL querys with an online terminal. Solve SQL query questions using a practice database. Learn and improve your SQL skills.",
+      "category": "all",
+      "query": "test query",
+      "found_at": "2026-06-15T13:07:18.077047",
+      "email": null
+    },
+    {
+      "title": "SQL Practice Online - Free Online SQL Compiler &amp; Compiler SQL Online",
+      "url": "//duckduckgo.com/l/?uddg=https%3A%2F%2Fwww.sqlpractice.in%2Fpractice&amp;rut=b85a25343d42b3b6579d6e77371c0246193631394c53e77f57f7d7a2e8d43d60",
+      "snippet": "Master SQL with our free Online SQL Compiler. SQL Practice with real-world questions from TCS, Infosys, Deloitte (2026). The best Online SQL Query Compiler for interview preparation.",
+      "category": "all",
+      "query": "test query",
+      "found_at": "2026-06-15T13:07:18.077064",
+      "email": null
+    },
+    {
+      "title": "SQL Playground: Write and Execute SQL Queries Online",
+      "url": "//duckduckgo.com/l/?uddg=https%3A%2F%2Fsqltest.online%2Fen%2Fplayground%2F&amp;rut=499e4f4512c83b69411914a16ab3fd92c6412bb3e4411ee02d365652808f5e92",
+      "snippet": "Use our free SQL Playground to write and execute SQL queries online. Practice with MariaDB, MySQL, PostgreSQL, SQLite, SQL Server, Oracle, and Firebird directly in your browser.",
+      "category": "all",
+      "query": "test query",
+      "found_at": "2026-06-15T13:07:18.077121",
+      "email": null
+    },
+    {
+      "title": "SQL Playground",
+      "url": "//duckduckgo.com/l/?uddg=https%3A%2F%2Fsqltutorial.org%2Fplayground%2F&amp;rut=7ce8ed4610e422ffe055bb543214baf74264162373faeda337e59ee0d2ae6a5d",
+      "snippet": "SQL Playground is a free and interactive tool to practice SQL statements online.",
+      "category": "all",
+      "query": "test query",
+      "found_at": "2026-06-15T13:07:31.457588",
+      "email": null
+    },
+    {
+      "title": "SQL Tryit Editor v1.6 - W3Schools",
+      "url": "//duckduckgo.com/l/?uddg=https%3A%2F%2Fwww.w3schools.com%2Fsql%2Ftrysql.asp%3Ffilename%3Dtrysql_asc&amp;rut=8f852043f7c44f0ea9ffb212a5d2718bdaabd65074364286cfcab15a05c58759",
+      "snippet": "Our Try-SQL Editor uses WebSQL to demonstrate SQL. A Database-object is created in your browser, for testing purposes. You can try any SQL statement, and play with the Database as much as you like. Th",
+      "category": "all",
+      "query": "test query",
+      "found_at": "2026-06-15T13:07:31.458002",
+      "email": null
+    },
+    {
+      "title": "SQL Test",
+      "url": "//duckduckgo.com/l/?uddg=https%3A%2F%2Fsqltest.net%2F&amp;rut=86455b9cef71e66d16d888d52f8cf16f895596d935dbbea1a8e950d38664ba59",
+      "snippet": "Free online SQL Test tool for easy SQL query learning and testing.",
+      "category": "all",
+      "query": "test query",
+      "found_at": "2026-06-15T13:07:31.458080",
+      "email": null
+    },
+    {
+      "title": "Online SQL Editor - myCompiler",
+      "url": "//duckduckgo.com/l/?uddg=https%3A%2F%2Fwww.mycompiler.io%2Fonline%2Dsql%2Deditor&amp;rut=55e1fcfd9c4c5e97ca0e578ffd4e69c7d5456f6b6e2754bdd7ad1bc2647403ae",
+      "snippet": "Online SQL Editor - Edit and Run your SQL scripts with myCompiler. Simple and easy to use IDE to edit, run and test your SQL code.",
+      "category": "all",
+      "query": "test query",
+      "found_at": "2026-06-15T13:07:31.458097",
+      "email": null
+    },
+    {
+      "title": "SQL Fiddle - Online SQL Compiler for learning &amp; practice",
+      "url": "//duckduckgo.com/l/?uddg=https%3A%2F%2Fsqlfiddle.com%2F&amp;rut=e0f545901cdb20a85aa882dc4bd27a9ee73c50f00f0ef95f68a5d5eb637de32c",
+      "snippet": "SQL Fiddle is a web-based platform that lets you write, edit, and execute any SQL query. You can also use AI chat and SQL query generator to learn and practice SQL with different databases.",
+      "category": "all",
+      "query": "test query",
+      "found_at": "2026-06-15T13:07:31.458116",
+      "email": null
+    },
+    {
+      "title": "DB Fiddle - SQL Database Playground",
+      "url": "//duckduckgo.com/l/?uddg=https%3A%2F%2Fwww.db%2Dfiddle.com%2F&amp;rut=c9a7b8c059c05c88cb0944b192b442be89edefca29a0fa0e23ff27cd578da90f",
+      "snippet": "An online SQL database playground for testing, debugging and sharing SQL snippets.",
+      "category": "all",
+      "query": "test query",
+      "found_at": "2026-06-15T13:07:31.458137",
+      "email": null
+    },
+    {
+      "title": "SQL Online Test | TestDome",
+      "url": "//duckduckgo.com/l/?uddg=https%3A%2F%2Fwww.testdome.com%2Ftests%2Fsql%2Donline%2Dtest%2F12&amp;rut=1b3af73ac968a5f21369061e34157540723180268cf54e9970b4251c98141a1d",
+      "snippet": "The SQL online test assesses SQL skills using live coding tasks that require writing CRUD operations in order to extract, combine, and manipulate data.",
+      "category": "all",
+      "query": "test query",
+      "found_at": "2026-06-15T13:07:31.458152",
+      "email": null
+    },
+    {
+      "title": "RunSQL - Online SQL Playground for MySQL, PostgreSQL, and SQL Server",
+      "url": "//duckduckgo.com/l/?uddg=https%3A%2F%2Frunsql.com%2F&amp;rut=865cbf4bb47ac520d75ffc879818d69fb39b33f421f2d21bd1a73c9e34ad48ff",
+      "snippet": "Explore, learn, and share SQL queries in our free online SQL playground. Support for MySQL, PostgreSQL, and SQL Server, perfect for testing and enhancing your SQL skills.",
+      "category": "all",
+      "query": "test query",
+      "found_at": "2026-06-15T13:07:31.458170",
+      "email": null
+    },
+    {
+      "title": "SQL Playground",
+      "url": "//duckduckgo.com/l/?uddg=https%3A%2F%2Fsqltutorial.org%2Fplayground%2F&amp;rut=7ce8ed4610e422ffe055bb543214baf74264162373faeda337e59ee0d2ae6a5d",
+      "snippet": "SQL Playground is a free and interactive tool to practice SQL statements online.",
+      "category": "all",
+      "query": "test query",
+      "found_at": "2026-06-15T13:07:50.978120",
+      "email": null
+    },
+    {
+      "title": "SQL Tryit Editor v1.6 - W3Schools",
+      "url": "//duckduckgo.com/l/?uddg=https%3A%2F%2Fwww.w3schools.com%2Fsql%2Ftrysql.asp%3Ffilename%3Dtrysql_asc&amp;rut=8f852043f7c44f0ea9ffb212a5d2718bdaabd65074364286cfcab15a05c58759",
+      "snippet": "Edit the SQL Statement, and click &quot;Run SQL&quot; to see the result.",
+      "category": "all",
+      "query": "test query",
+      "found_at": "2026-06-15T13:07:50.978639",
+      "email": null
+    },
+    {
+      "title": "SQL Test",
+      "url": "//duckduckgo.com/l/?uddg=https%3A%2F%2Fsqltest.net%2F&amp;rut=86455b9cef71e66d16d888d52f8cf16f895596d935dbbea1a8e950d38664ba59",
+      "snippet": "Free online SQL Test tool for easy SQL query learning and testing.",
+      "category": "all",
+      "query": "test query",
+      "found_at": "2026-06-15T13:07:50.978668",
+      "email": null
+    },
+    {
+      "title": "MySQL Online Editor - OneCompiler",
+      "url": "//duckduckgo.com/l/?uddg=https%3A%2F%2Fonecompiler.com%2Fmysql&amp;rut=6275f371011da4e749a80f8ef75f95ae03f9df13c9950ad3203ee517c08d715f",
+      "snippet": "OneCompiler&#x27;s MySQL online Workbench helps you to write, compile, debug, run and test MySQL queries online.",
+      "category": "all",
+      "query": "test query",
+      "found_at": "2026-06-15T13:07:50.978690",
+      "email": null
+    },
+    {
+      "title": "SQL Online Editor (Compiler) - W3Schools",
+      "url": "//duckduckgo.com/l/?uddg=https%3A%2F%2Fwww.w3schools.com%2Fsql%2Fsql_editor.asp&amp;rut=53daf6a7e9ce3af0dbdca3fe946667f0ae76b83ff371f9f695f28f1e9b02d21e",
+      "snippet": "Learn and practice SQL statements with this online tool. You can also create and publish your own website with SQL Database using W3Schools Spaces.",
+      "category": "all",
+      "query": "test query",
+      "found_at": "2026-06-15T13:07:50.978712",
+      "email": null
+    },
+    {
+      "title": "SQL Fiddle - Online SQL Compiler for learning &amp; practice",
+      "url": "//duckduckgo.com/l/?uddg=https%3A%2F%2Fsqlfiddle.com%2F&amp;rut=e0f545901cdb20a85aa882dc4bd27a9ee73c50f00f0ef95f68a5d5eb637de32c",
+      "snippet": "SQL Fiddle is a web-based platform that lets you write, edit, and execute any SQL query. You can also use AI chat and SQL query generator to learn and practice SQL with different databases.",
+      "category": "all",
+      "query": "test query",
+      "found_at": "2026-06-15T13:07:50.978736",
+      "email": null
+    },
+    {
+      "title": "SQL Practice Online - Free Online SQL Compiler &amp; Compiler SQL Online",
+      "url": "//duckduckgo.com/l/?uddg=https%3A%2F%2Fwww.sqlpractice.in%2Fpractice&amp;rut=b85a25343d42b3b6579d6e77371c0246193631394c53e77f57f7d7a2e8d43d60",
+      "snippet": "Master SQL with our free Online SQL Compiler. SQL Practice with real-world questions from TCS, Infosys, Deloitte (2026). The best Online SQL Query Compiler for interview preparation.",
+      "category": "all",
+      "query": "test query",
+      "found_at": "2026-06-15T13:07:50.978764",
+      "email": null
+    },
+    {
+      "title": "Learn SQL - Online SQL Terminal - Practice SQL Querys",
+      "url": "//duckduckgo.com/l/?uddg=https%3A%2F%2Fwww.sql%2Dpractice.com%2F&amp;rut=d78d458dcf0326295ca4fff553b6f28a26df43b2266159e07fe78f1ebaebc992",
+      "snippet": "Practice SQL querys with an online terminal. Solve SQL query questions using a practice database. Learn and improve your SQL skills.",
+      "category": "all",
+      "query": "test query",
+      "found_at": "2026-06-15T13:07:50.978790",
+      "email": null
+    }
+  ]
+}

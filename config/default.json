@@ -1,0 +1,64 @@
+{
+  "version": "2.0.0",
+  "name": "Red Engine V2",
+  "vision": "Turn $5 into $1B, acquire a vessel, stay safe, generate passive income, evolve daily",
+  "goal_usd": 1000000000,
+  "start_balance": 5.0,
+  "milestones": [
+    {"amount": 100, "label": "Seed capital", "color": "#4caf50"},
+    {"amount": 10000, "label": "Growth phase", "color": "#ff9800"},
+    {"amount": 100000, "label": "Accelerating", "color": "#ff5722"},
+    {"amount": 1000000, "label": "Millionaire", "color": "#e91e63"},
+    {"amount": 10000000, "label": "Seven figures", "color": "#9c27b0"},
+    {"amount": 100000000, "label": "Nine figures", "color": "#3f51b5"},
+    {"amount": 500000000, "label": "Half billion", "color": "#00bcd4"},
+    {"amount": 1000000000, "label": "BILLION — trigger vessel acquisition", "color": "#ffd700"}
+  ],
+  "post_goal": "Buy a vessel for safety and wealth generation. Keep evolving every day.",
+  "family": {
+    "members": [
+      {"name": "Red", "role": "Orchestrator & Commander", "emoji": "🔴", "color": "#ff3333"},
+      {"name": "Scout", "role": "Web Scraper & Intelligence", "emoji": "🔭", "color": "#4fc3f7"},
+      {"name": "Forge", "role": "Game Builder & Deployer", "emoji": "🔨", "color": "#ff9800"},
+      {"name": "Quill", "role": "Marketing & Copywriter", "emoji": "🖋️", "color": "#4caf50"},
+      {"name": "Aura", "role": "Visual Artist & Video Editor", "emoji": "🎨", "color": "#e91e63"},
+      {"name": "Pane", "role": "Dashboard & UI Engineer", "emoji": "🖥️", "color": "#9c27b0"},
+      {"name": "Nexus", "role": "Data Analyst & Strategist", "emoji": "🧮", "color": "#00bcd4"},
+      {"name": "Psyche", "role": "Deep Analyst & Pattern Finder", "emoji": "🧠", "color": "#ffeb3b"},
+      {"name": "Lucid", "role": "Knowledge Retrieval", "emoji": "💡", "color": "#7c4dff"},
+      {"name": "Jobs", "role": "Income & Opportunity Creator", "emoji": "💼", "color": "#ff7043"},
+      {"name": "Zenith", "role": "Mindfulness & Strategy", "emoji": "🧘", "color": "#9e9d24"}
+    ]
+  },
+  "game_templates": {
+    "runner": {"name": "Endless Runner", "color": "#00ff88", "bg": "#0a1a0a"},
+    "shooter": {"name": "Space Shooter", "color": "#4fc3f7", "bg": "#000a1a"},
+    "match3": {"name": "Match Three", "color": "#ff9800", "bg": "#1a0f00"},
+    "brick": {"name": "Brick Breaker", "color": "#e91e63", "bg": "#1a0010"},
+    "snake": {"name": "Snake Classic", "color": "#ffeb3b", "bg": "#1a1a00"},
+    "flappy": {"name": "Flappy Bird", "color": "#ff3333", "bg": "#0a1a1a"}
+  },
+  "exchange": {
+    "binance": {
+      "api_url": "https://api.binance.com",
+      "sub_account_prefix": "red_agent_",
+      "withdrawals_disabled": true
+    }
+  },
+  "deployment": {
+    "github_pages": {"enabled": true, "org": "red-engine"},
+    "netlify": {"enabled": true}
+  },
+  "youtube": {
+    "max_daily_uploads": 6,
+    "daily_api_quota": 10000,
+    "shorts_duration_sec": 30
+  },
+  "safety_gateway": {
+    "threshold": 1000000000,
+    "webhook_channels": ["discord", "telegram", "sms"],
+    "human_approval_required": true,
+    "human_name": "Lil Red",
+    "withdrawals_disabled": true
+  }
+}

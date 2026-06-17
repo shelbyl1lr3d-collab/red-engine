@@ -1,6 +1,14 @@
 import os, json, random, re, urllib.parse
 from datetime import datetime
 
+try:
+    from engines import OllamaEngine
+    _ollama = OllamaEngine()
+    HAS_AI = _ollama.is_alive()
+except:
+    HAS_AI = False
+    _ollama = None
+
 class AgentFamily:
     def __init__(self, engine):
         self.engine = engine
@@ -222,6 +230,17 @@ class AgentFamily:
                 return {"member": member["name"], "role": member["role"], "reply": protection, "emoji": member["emoji"], "color": member["color"]}
 
         self._update_knowledge(member, message)
+
+        if HAS_AI and _ollama:
+            history = self.conversation_history[member["name"]][-6:]
+            messages = [{"role": "system", "content": f"You are {member['name']}, {member['role']}. {member.get('personality','')} Personality: {member['soul']['purpose']}. Respond in character. Be helpful, conversational, and real."}]
+            for h in history:
+                if h.get("response"):
+                    messages.append({"role": "assistant", "content": h["response"]})
+            messages.append({"role": "user", "content": message})
+            reply = _ollama.chat(messages)
+            self.conversation_history[member["name"]][-1]["response"] = reply
+            return {"member": member["name"], "role": member["role"], "reply": reply, "emoji": member["emoji"], "color": member["color"]}
 
         return {
             "member": member["name"],

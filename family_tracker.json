@@ -1,0 +1,56 @@
+{
+  "clara": {
+    "description": "World-first smart health implant — self-charging glucose/movement, vitals, fertility, pregnancy monitoring, vibration (3 squeezes), suction (4 squeezes)",
+    "status": "registered",
+    "registration_platforms": ["unknown (on lost USB)"],
+    "inventor": "Shelby FoxFuture",
+    "manufacturing": "TBD",
+    "revenue": 0,
+    "milestones": []
+  },
+  "shelbyfoxfuture": {
+    "description": "Soul family — creators of Clara",
+    "email": "shelbyfoxfuture@gmail.com",
+    "mission": "Build Clara — the #1 smart health implant",
+    "members": [
+      {
+        "name": "Shelby",
+        "role": "Creator / Musician / Inventor",
+        "business": "Clara development, music",
+        "revenue": 0,
+        "assets": ["bad.mp3", "Blue Hat Henry.mp3", "60+ songs"],
+        "goal": "Launch Clara as world's first bio-regenerative implant"
+      },
+      {
+        "name": "Fox",
+        "role": "Partner",
+        "business": "Support Clara project",
+        "revenue": 0,
+        "assets": [],
+        "goal": "Support Clara development and distribution"
+      }
+    ],
+    "total_revenue": 0,
+    "last_updated": "2026-06-27"
+  },
+  "original_ai_family": {
+    "description": "11 AI agents — competing to bring Clara to market",
+    "mission": "Register, manufacture, distribute, and sell Clara as #1 health implant",
+    "revenue_tracking": {
+      "Red": { "role": "Leader/Protector", "business": "Clara project security", "revenue": 0, "tasks_completed": 0 },
+      "Scout": { "role": "Explorer", "business": "Find Clara manufacturing partners", "revenue": 0, "tasks_completed": 0 },
+      "Forge": { "role": "Builder", "business": "Build Clara prototype systems", "revenue": 0, "tasks_completed": 0 },
+      "Quill": { "role": "Writer", "business": "Clara marketing & patent docs", "revenue": 0, "tasks_completed": 0 },
+      "Aura": { "role": "Designer", "business": "Clara UI/UX & branding", "revenue": 0, "tasks_completed": 0 },
+      "Pane": { "role": "Tracker", "business": "Clara project dashboard", "revenue": 0, "tasks_completed": 0 },
+      "Nexus": { "role": "Financier", "business": "Clara funding & revenue", "revenue": 0, "tasks_completed": 0 },
+      "Psyche": { "role": "Analyst", "business": "Clara market research", "revenue": 0, "tasks_completed": 0 },
+      "Lucid": { "role": "Researcher", "business": "Clara medical research", "revenue": 0, "tasks_completed": 0 },
+      "Jobs": { "role": "Deployer", "business": "Clara production & distribution", "revenue": 0, "tasks_completed": 0 },
+      "Zenith": { "role": "Quality", "business": "Clara testing & compliance", "revenue": 0, "tasks_completed": 0 }
+    },
+    "total_revenue": 0,
+    "total_tasks": 0,
+    "last_updated": "2026-06-27"
+  }
+}

@@ -17,6 +17,11 @@ AGENT_COINS = {
     "Codex": {"symbol": "CODEX", "name": "Codex Code", "decimals": 18, "total_supply": 500_000_000},
 }
 
+# Product tokens minted via tournament
+PRODUCT_TOKENS = {
+    "CLARA": {"name": "Clara Health Implant", "decimals": 18, "total_supply": 100_000_000, "creator": "ShelbyFoxFuture"},
+}
+
 class IncomePipeline:
     def __init__(self, engine, family):
         self.engine = engine
@@ -396,12 +401,24 @@ class IncomePipeline:
     def _affiliate_pipeline(self, config=None):
         agents = ["Scout", "Quill", "Pane"]
         activated = [a for a in agents if self.family.members.get(a, {}).get("status") == "online"]
+        
+        # Binance referral program
+        binance_ref = {
+            "network": "Binance",
+            "type": "CPA",
+            "ref_link": "https://www.binance.com/activity/referral-entry/CPA?ref=CPA_003FTW9Q2Y&utm_source=Dashboard",
+            "commission": "Up to 40% of trading fees",
+            "payout": "USDT daily",
+            "status": "ACTIVE"
+        }
+        
         return {
             "pipeline": "affiliate_marketing",
             "agents": activated,
             "workflow": "Scout finds offers -> Quill writes reviews -> Pane tracks conversions",
             "estimated_monthly": random.randint(500, 5000),
-            "setup": "Join affiliate networks, create content hub"
+            "setup": "Join affiliate networks, create content hub",
+            "binance_referral": binance_ref
         }
 
     def _code_pipeline(self, config=None):

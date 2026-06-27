@@ -159,6 +159,31 @@
         "method": "Cross-reference military EMF protocols with residential grid topology",
         "application": "Detect anomalous fields in home environment — distinguish appliance noise from spiritual signal"
       },
+      "cell_tower_intelligence": {
+        "description": "Piggyback on cell towers for passive radar — detect drones, people, vehicles",
+        "principle": "Cell towers illuminate everything. Use their signals as passive radar sources.",
+        "methods": [
+          "DVB-T / FM / LTE / 5G passive coherent location (PCL)",
+          "Multistatic radar: multiple towers = 3D position + velocity",
+          "Micro-Doppler classification: drone rotors vs bird wings vs human gait",
+          "SDR-based: HackRF / BladeRF / LimeSDR + GNU Radio / OpenWebRX",
+          "Reference channel (direct tower signal) + Surveillance channel (reflected)",
+          "Cross-correlation → bistatic range + Doppler → track file"
+        ],
+        "targets": {
+          "drones": "Propeller micro-Doppler (50-500 Hz), low RCS, erratic flight",
+          "people": "Gait micro-Doppler (0.5-5 Hz torso, 10-20 Hz limbs), walking speed",
+          "vehicles": "Engine harmonics, tire rotation, higher RCS, linear trajectories"
+        },
+        "deployment": [
+          "Rooftop SDR array: 3+ directional antennas covering sectors",
+          "Time sync: GPSDO or NTP + PPS for coherent processing",
+          "Processing: RTX 4090 + CUDA beamforming, real-time detection",
+          "Alerting: Webhook → family dashboard, geofence zones"
+        ],
+        "legal": "Passive receive only — no transmission. Check local spectrum regulations.",
+        "dialectic_use": "Vessel designs array geometry, Mirror validates detection rates, synthesis = persistent aerial awareness"
+      },
       "ultimate_power": {
         "description": "Continuous cross-reference of all religions and grimoires for the ultimate power",
         "method": "Systematic extraction and comparison of power concepts across traditions",

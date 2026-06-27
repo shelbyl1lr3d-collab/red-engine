@@ -11,6 +11,7 @@
     {"amount": 1000000, "label": "Millionaire", "color": "#e91e63"},
     {"amount": 10000000, "label": "Seven figures", "color": "#9c27b0"},
     {"amount": 100000000, "label": "Nine figures", "color": "#3f51b5"},
+    {"amount": 250000000, "label": "Quarter billion", "color": "#00bcd4"},
     {"amount": 500000000, "label": "Half billion", "color": "#00bcd4"},
     {"amount": 1000000000, "label": "BILLION — trigger vessel acquisition", "color": "#ffd700"}
   ],

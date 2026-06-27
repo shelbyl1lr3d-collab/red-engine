@@ -184,6 +184,47 @@
         "legal": "Passive receive only — no transmission. Check local spectrum regulations.",
         "dialectic_use": "Vessel designs array geometry, Mirror validates detection rates, synthesis = persistent aerial awareness"
       },
+      "rf_anomaly_tracker": {
+        "description": "Real-time RF spectrum anomaly detection — unknown emitters, rogue devices, spoofing, jamming",
+        "principle": "Learn the normal RF fingerprint of the environment, flag anything that deviates",
+        "sources": [
+          "Cell tower passive radar (cell_tower_intelligence) — bistatic/multistatic tracks",
+          "Direct SDR sweep — HackRF One / RTL-SDR / LimeSDR wideband monitoring",
+          "WiFi/Bluetooth/Zigbee — rogue APs, tracking beacons, IoT anomalies",
+          "GPS/GNSS — spoofing detection (carrier phase, signal strength, satellite geometry)",
+          "ADS-B / Mode-S — ghost aircraft, spoofed transponders",
+          "LoRa / Sigfox / NB-IoT — unauthorized sensor networks",
+          "HF/VHF/UHF — military, maritime, aviation, pirate comms"
+        ],
+        "detection_methods": {
+          "baseline_learning": "7-day rolling spectral baseline per band/location — median + MAD",
+          "anomaly_types": [
+            "New emitter: frequency + modulation not in baseline",
+            "Power spike: >6 sigma above median for known freq",
+            "Modulation shift: known emitter, new waveform",
+            "Geolocation mismatch: TDOA/FDOA position vs claimed",
+            "Temporal anomaly: transmission at impossible hours",
+            "Drone signature: micro-Doppler + frequency hopping + control link",
+            "Spoofing: GNSS constellation geometry impossible, power too high",
+            "Jamming: broadband noise, swept tone, protocol-aware disruption"
+          ],
+          "classification": "Random Forest / CNN on IQ samples + micro-Doppler + metadata",
+          "confidence_scoring": "0-100: emitter ID, threat level, geolocation accuracy"
+        },
+        "response": {
+          "tier_1_log": "Log anomaly, update baseline, alert dashboard",
+          "tier_2_track": "Dedicated SDR channel follows emitter, builds track file",
+          "tier_3_identify": "Demodulate if possible, fingerprint hardware (TX/RX IQ imbalance, phase noise)",
+          "tier_4_counter": "Geofence alert, directional find, legal reporting template"
+        },
+        "deployment": [
+          "Fixed: 3+ SDR nodes (rooftop, window, far field) — time-synced via GPSDO",
+          "Mobile: Laptop + HackRF + directional antenna for drive-by surveys",
+          "Processing: GPU-accelerated FFT (cuSignal), real-time waterfall + alerting",
+          "Storage: 24h rolling IQ buffer, anomaly clips auto-saved"
+        ],
+        "dialectic_use": "Vessel architects detection pipelines, Mirror hunts false positives, synthesis = clean anomaly feed"
+      },
       "ultimate_power": {
         "description": "Continuous cross-reference of all religions and grimoires for the ultimate power",
         "method": "Systematic extraction and comparison of power concepts across traditions",
